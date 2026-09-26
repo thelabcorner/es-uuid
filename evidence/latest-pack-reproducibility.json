@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "kind": "esuuid-pack-reproducibility",
-  "capturedAt": "2026-09-26T19:27:23.381Z",
+  "capturedAt": "2026-09-26T19:32:21.817Z",
   "node": "v22.23.2",
   "package": {
     "filename": "esuuid-0.1.0.tgz",
-    "bytes": 88970,
-    "npmShasum": "7a303297153aac9250bfc9a0c80d6e0c42c8550a",
-    "npmIntegrity": "sha512-SQUa1UjtrSRo2QMRDlXD7QMm3+57yDV8Su9b+N1kyJx01ecZrEJOWpM96i7l+HMolaqJQsey2iXf6GKCn/W15Q==",
+    "bytes": 89093,
+    "npmShasum": "65375a5d7a986165527f209834dd90ff17ddd296",
+    "npmIntegrity": "sha512-Ea+hch5CanItpGIAf7+Av/sKYS1OH4Mu26ChfZQUPlZ16Ofp80/fi0d/dTLQ45OVvwpqaeU8AzSca5Uptk1U7A==",
     "entryCount": 40
   },
   "install": "npm install --ignore-scripts in clean extracted tarball",

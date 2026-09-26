@@ -36,13 +36,17 @@ function collectFiles(dir, out) {
     var entry = entries[i];
     var full = join(dir, entry.name);
     var rel = relative(ROOT, full).replace(/\\/g, '/');
+    // A normal checkout exposes .git as a directory; linked worktrees expose
+    // it as a file. Neither representation is source and neither may affect
+    // release provenance.
+    if (rel === '.git' || rel.indexOf('.git/') === 0) continue;
     if (entry.isDirectory()) {
       if (
-        rel === '.git' ||
         rel === 'node_modules' ||
         rel === 'dist' ||
         rel === 'evidence' ||
         rel === 'release' ||
+        rel === 'prototypes' ||
         rel === 'tests/.tmp'
       ) continue;
       collectFiles(full, out);
