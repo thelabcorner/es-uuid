@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "esuuid-live-verify",
-  "capturedAt": "2026-09-26T08:17:32.118Z",
+  "capturedAt": "2026-09-26T08:31:06.797Z",
   "transport": "COM Tool V2 script.runFile",
   "pipe": "esuuid-v2-final",
   "target": {
@@ -11,22 +11,22 @@
     "hostVersion": "30.6.0",
     "adapterVersion": "0.1.0-dev"
   },
-  "requestId": "esuuid-live-73bc149f6fb429f2-mui49vrb",
-  "probeSha256": "73bc149f6fb429f22bafb0bdcffc8e5e07f1d548d8e3c83b0b29d6e04e3ed2ad",
+  "requestId": "esuuid-live-d4749dea12ba5f16-mui4rcb4",
+  "probeSha256": "d4749dea12ba5f16aaa6f03dd091505d6576d812d0614cbe7b6b5845947436e6",
   "artifacts": {
-    "esuuidReadableSha256": "db2a20c67b1eeca8723a04e7f93596c29f766868532efcd6c45788d52f0c091d",
-    "esuuidMinifiedSha256": "34d0f7121ccc12ff536a8b38cfd75c265ba8a9e05ac332616bb4da72945c654e",
+    "esuuidReadableSha256": "e217d0c3da1fc087ee00757fb475878277d3f107b1cdc0de46c060f4a44f941b",
+    "esuuidMinifiedSha256": "e9930f70f86542a5d4947f2e46e656d212dbe7c9dfbef921346994cfe899afa8",
     "esrandVendorSha256": "ccd7e3fc0d61e20b54ba5ed7f1158a77c7587e9ade0f3c41b7086af14a7d963e"
   },
-  "checks": 48,
+  "checks": 54,
   "illustrator": "30.6.0",
   "extendScript": "4.5.6",
-  "result": "ESUUID_LIVE_PASS|48|Illustrator=30.6.0|ExtendScript=4.5.6",
+  "result": "ESUUID_LIVE_PASS|54|Illustrator=30.6.0|ExtendScript=4.5.6",
   "timing": {
-    "queueMs": 0.0013,
-    "executeMs": 178.2117,
+    "queueMs": 0.0032,
+    "executeMs": 185.192,
     "verifyMs": 0,
-    "totalMs": 194.9937
+    "totalMs": 199.882
   },
   "targetState": "known_changed"
 }

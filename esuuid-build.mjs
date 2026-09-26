@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process';
 import { buildSync } from 'esbuild';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync, unlinkSync } from 'node:fs';
+import { closeSync, copyFileSync, existsSync, mkdirSync, openSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,6 +19,56 @@ var ESTC = process.env.ESUUID_ESTC || (
 var MINIFIER = join(ROOT, 'tooling', 'minifier', 'minify-jsx.py');
 var MIN_CONFIG = join(ROOT, 'tooling', 'minifier', 'conservative.json');
 var PYTHON = process.env.ESUUID_PYTHON || 'python';
+var BUILD_LOCK = join(ROOT, '.esuuid-build.lock');
+
+function sleepSync(ms) {
+  var cell = new Int32Array(new SharedArrayBuffer(4));
+  Atomics.wait(cell, 0, 0, ms);
+}
+
+function pidAlive(pid) {
+  if (!(pid > 0)) return false;
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function acquireBuildLock() {
+  var deadline = Date.now() + 300000;
+  while (true) {
+    try {
+      var fd = openSync(BUILD_LOCK, 'wx');
+      writeFileSync(fd, String(process.pid), 'utf8');
+      closeSync(fd);
+      return;
+    } catch (error) {
+      if (!error || error.code !== 'EEXIST') throw error;
+      var owner = 0;
+      try { owner = Number(readFileSync(BUILD_LOCK, 'utf8')); } catch (_) {}
+      if (!pidAlive(owner)) {
+        try { unlinkSync(BUILD_LOCK); } catch (_) {}
+        continue;
+      }
+      if (Date.now() >= deadline) {
+        throw new Error('Timed out waiting for concurrent ESUUID build process ' + owner);
+      }
+      sleepSync(250);
+    }
+  }
+}
+
+function releaseBuildLock() {
+  try {
+    var owner = Number(readFileSync(BUILD_LOCK, 'utf8'));
+    if (owner === process.pid) unlinkSync(BUILD_LOCK);
+  } catch (_) {}
+}
+
+acquireBuildLock();
+process.on('exit', releaseBuildLock);
 
 mkdirSync(DIST, { recursive: true });
 
@@ -83,3 +133,4 @@ for (const file of ['dist/ESUUID.jsx','dist/ESUUID.min.jsx','dist/vendor-esuuid.
 for (const file of ['dist/ESUUID.jsx','dist/ESUUID.min.jsx','dist/vendor-esuuid.js','dist/vendor-esuuid.min.js','dist/esuuid-core.esm.mjs']) {
   console.log('[esuuid-build] ' + file + ' ' + statSync(join(ROOT, file)).size + ' bytes');
 }
+releaseBuildLock();

@@ -27,7 +27,11 @@ if (!Number.isInteger(rounds) || rounds < 1 || rounds > 20) {
   throw new Error('--rounds must be an integer from 1 to 20');
 }
 
-var allLanes = ['v4-esrand','v4-explicit','v7-esrand','v7-explicit','parse','stringify','v5'];
+var allLanes = [
+  'v4-esrand','v4-math','v4-explicit',
+  'v7-esrand','v7-math','v7-explicit',
+  'parse','stringify','v5'
+];
 var lanes = laneArg
   ? laneArg.split(',').map(function (x) { return x.trim(); }).filter(Boolean)
   : allLanes.slice();

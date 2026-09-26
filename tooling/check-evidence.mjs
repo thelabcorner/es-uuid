@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 var ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 var SCRIPTS_ROOT = dirname(ROOT);
-var EXPECTED_LIVE_CHECKS = 48;
+var EXPECTED_LIVE_CHECKS = 54;
 
 function fail(message) {
   throw new Error('[evidence:check] ' + message);
@@ -91,8 +91,8 @@ for (var pi = 0; pi < pack.artifacts.length; pi++) {
 }
 
 if (bench.rounds !== 3) fail('benchmark evidence must contain 3 rounds');
-if (!Array.isArray(bench.summary) || bench.summary.length !== 7) {
-  fail('benchmark evidence must contain exactly 7 summary lanes');
+if (!Array.isArray(bench.summary) || bench.summary.length !== 9) {
+  fail('benchmark evidence must contain exactly 9 summary lanes');
 }
 for (var i = 0; i < bench.summary.length; i++) {
   if (bench.summary[i].rounds !== 3) fail(bench.summary[i].lane + ' benchmark rounds drifted');
@@ -131,8 +131,10 @@ requireText(measured, '- Probe SHA-256: `' + live.probeSha256 + '`', 'MEASURED-F
 
 var rowNames = {
   'v4-esrand': ['v4, ESRAND entropy', 'v4 + ESRAND'],
+  'v4-math': ['v4, Math.random fallback', 'v4 + Math.random fallback'],
   'v4-explicit': ['v4, explicit bytes', 'v4 explicit bytes'],
   'v7-esrand': ['v7, ESRAND entropy', 'v7 + ESRAND'],
+  'v7-math': ['v7, Math.random fallback', 'v7 + Math.random fallback'],
   'v7-explicit': ['v7, explicit bytes', 'v7 explicit bytes/time/sequence'],
   'parse': ['parse', 'parse'],
   'stringify': ['stringify', 'stringify'],
@@ -161,5 +163,5 @@ for (i = 0; i < bench.summary.length; i++) {
 
 console.log(
   '[evidence:check] PASS: ' + EXPECTED_LIVE_CHECKS + '/' + EXPECTED_LIVE_CHECKS +
-  ' live contract, 7 benchmark lanes, packed reproducibility, artifact hashes, sizes, and docs are synchronized'
+  ' live contract, 9 benchmark lanes, packed reproducibility, artifact hashes, sizes, and docs are synchronized'
 );

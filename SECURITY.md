@@ -12,7 +12,7 @@ Use GitHub's private **Report a vulnerability** / security-advisory flow for thi
 
 ## Entropy boundary
 
-The ExtendScript facade can use ESRAND when it is present on `$.global`.
+The ExtendScript facade prefers ESRAND when it is present on `$.global`.
 
 ESRAND is deterministic and non-cryptographic. Therefore ESRAND-backed ESUUID generation is not appropriate when an attacker must not be able to predict UUID values.
 
@@ -24,9 +24,14 @@ Do not rely on ESRAND-backed UUIDs for:
 - encryption/signing keys;
 - capability URLs whose security depends on UUID unpredictability.
 
-For security-sensitive generation, inject an appropriate cryptographically secure 16-byte source with `random`, `rng`, or `create({ rand })`.
+If ESRAND and caller-provided entropy are both absent, the ExtendScript facade
+falls back to `Math.random()` so ordinary UUID generation can continue. The
+fallback emits a one-time warning on first use and
+`capabilities().entropy === "Math.random-fallback"`.
 
-ESUUID never silently substitutes `Math.random()` when no entropy backend exists.
+The `Math.random()` fallback is **not cryptographic** and may be predictable.
+For security-sensitive generation, inject an appropriate cryptographically
+secure 16-byte source with `random`, `rng`, or `create({ rand })`.
 
 ## Other security-relevant reports
 

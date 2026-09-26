@@ -14,7 +14,7 @@ import {
 } from '../tooling/comtool-v2.mjs';
 
 var config = parseCommonOptions(process.argv.slice(2));
-var EXPECTED_LIVE_CHECKS = 48;
+var EXPECTED_LIVE_CHECKS = 54;
 var probe = join(PROJECT_ROOT, 'tests', 'esuuid-live-probe.jsx');
 var esuuidReadable = join(PROJECT_ROOT, 'dist', 'ESUUID.jsx');
 var esuuidMinified = join(PROJECT_ROOT, 'dist', 'ESUUID.min.jsx');

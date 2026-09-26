@@ -5,6 +5,54 @@ import {
 } from './core';
 import { FactoryOptions, UUIDGenerator } from './types';
 
+var globalObject: any = $.global;
+
+function emitEntropyWarning(message: string): void {
+  // Internal hook used by the live suite and available to host integrators that
+  // want to route warnings somewhere other than the ExtendScript Console.
+  var hook: any = globalObject['__ESUUID_WARN__'];
+  if (typeof hook === 'function') {
+    try {
+      hook(message);
+      return;
+    } catch (_) {}
+  }
+  try {
+    if (typeof $.writeln === 'function') $.writeln(message);
+  } catch (_) {}
+}
+
+function makeMathRandomFallback(): any {
+  var warned = false;
+  return {
+    bytes: function (count: number): number[] {
+      if (!warned) {
+        warned = true;
+        emitEntropyWarning(
+          'ESUUID warning: ESRAND and caller-provided entropy are unavailable; ' +
+          'falling back to Math.random(). UUID entropy is non-cryptographic and may be predictable.'
+        );
+      }
+      var out: number[] = [];
+      var i: number;
+      for (i = 0; i < count; i++) {
+        out[i] = Math.floor(Math.random() * 256);
+      }
+      return out;
+    }
+  };
+}
+
+function desiredEntropyBackend(esrand: any): string {
+  if (esrand !== null && esrand !== undefined && typeof esrand.bytes === 'function') {
+    return 'ESRAND';
+  }
+  if (typeof Math !== 'undefined' && typeof Math.random === 'function') {
+    return 'Math.random-fallback';
+  }
+  return 'unavailable';
+}
+
 function bindGenerator(generator: UUIDGenerator): any {
   return {
     v1: function (options?: any, buffer?: number[], offset?: number): any {
@@ -24,8 +72,11 @@ function bindGenerator(generator: UUIDGenerator): any {
 
 function makeFacade(esrand: any): any {
   var defaultOptions: FactoryOptions = {};
-  if (esrand !== null && esrand !== undefined && typeof esrand.bytes === 'function') {
+  var entropyBackend = desiredEntropyBackend(esrand);
+  if (entropyBackend === 'ESRAND') {
     defaultOptions.rand = esrand;
+  } else if (entropyBackend === 'Math.random-fallback') {
+    defaultOptions.rand = makeMathRandomFallback();
   }
   var generator = create(defaultOptions);
   var bound = bindGenerator(generator);
@@ -70,7 +121,7 @@ function makeFacade(esrand: any): any {
       return {
         standard: 'RFC 9562',
         engine: 'ExtendScript ES3',
-        entropy: defaultOptions.rand !== undefined ? 'ESRAND' : 'injected-only',
+        entropy: entropyBackend,
         cryptographic: false
       };
     }
@@ -85,21 +136,16 @@ function isCompatibleFacade(value: any, installedRand: any): boolean {
     typeof value.validate === 'function' && typeof value.capabilities === 'function';
   if (!shapeCompatible) return false;
 
-  // A facade loaded before ESRAND is intentionally injected-only. If ESRAND
-  // becomes available later, re-evaluating ESUUID should upgrade the default
-  // backend rather than preserving a stale injected-only facade forever.
-  if (installedRand !== null && installedRand !== undefined &&
-      typeof installedRand.bytes === 'function') {
-    try {
-      if (value.capabilities().entropy !== 'ESRAND') return false;
-    } catch (error) {
-      return false;
-    }
+  // Entropy availability can change during a persistent host session. Preserve
+  // state only when the already-installed facade still represents the backend
+  // we would select now.
+  try {
+    return value.capabilities().entropy === desiredEntropyBackend(installedRand);
+  } catch (error) {
+    return false;
   }
-  return true;
 }
 
-var globalObject: any = $.global;
 var installedRand: any = globalObject['ESRAND'];
 var existingFacade: any = globalObject['ESUUID'];
 if (!isCompatibleFacade(existingFacade, installedRand)) {

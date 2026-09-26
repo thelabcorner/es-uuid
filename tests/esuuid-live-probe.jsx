@@ -7,6 +7,7 @@
   var esrandFile = File(scriptsDir.fsName + "/esrand/dist/vendor-esrand.js");
   var previousRand = $.global.ESRAND;
   var previousUuid = $.global.ESUUID;
+  var previousWarn = $.global.__ESUUID_WARN__;
   var checks = 0;
   var result = "";
 
@@ -136,24 +137,31 @@
     var reloadAfter = ESUUID.v7();
     assertTrue(reloadBefore < reloadAfter, "same-version reload preserves monotonic state");
 
-    // Fresh-load without ESRAND must be truthful: the facade remains useful for
-    // injected entropy but default random UUID generation is unavailable.
+    // Fresh-load without ESRAND falls back to Math.random, but does so loudly
+    // and truthfully. The warning is emitted once on first entropy use, not at
+    // library load time.
     var realRand = $.global.ESRAND;
+    var fallbackWarnings = [];
     $.global.ESUUID = void 0;
     $.global.ESRAND = void 0;
+    $.global.__ESUUID_WARN__ = function(message){ fallbackWarnings.push(String(message)); };
     $.evalFile(esuuidFile);
-    assertEq(ESUUID.capabilities().entropy, "injected-only", "missing ESRAND capability");
-    threw = false;
-    try { ESUUID.v4(); } catch (e5) { threw = true; }
-    assertTrue(threw, "missing ESRAND has no silent Math.random fallback");
+    assertEq(ESUUID.capabilities().entropy, "Math.random-fallback", "missing ESRAND capability");
     assertEq(
-      ESUUID.create({rng:function(){return zeros();}}).v4(),
+      ESUUID.v4({random:zeros()}),
       "00000000-0000-4000-8000-000000000000",
-      "injected-only facade remains usable"
+      "caller entropy bypasses Math.random fallback"
     );
+    assertEq(fallbackWarnings.length, 0, "caller entropy emits no fallback warning");
+    assertTrue(ESUUID.validate(ESUUID.v1()), "Math.random fallback v1");
+    assertTrue(ESUUID.validate(ESUUID.v4()), "Math.random fallback v4");
+    assertEq(fallbackWarnings.length, 1, "Math.random fallback warns on first use");
+    assertTrue(ESUUID.validate(ESUUID.v6()), "Math.random fallback v6");
+    assertTrue(ESUUID.validate(ESUUID.v7()), "Math.random fallback v7");
+    assertEq(fallbackWarnings.length, 1, "Math.random fallback warning is one-time");
     $.global.ESRAND = realRand;
     $.evalFile(esuuidFile);
-    assertEq(ESUUID.capabilities().entropy, "ESRAND", "reload upgrades injected-only facade when ESRAND appears");
+    assertEq(ESUUID.capabilities().entropy, "ESRAND", "reload upgrades Math.random fallback when ESRAND appears");
     assertTrue(ESUUID !== facadeBeforeReload, "entropy-backend upgrade replaces stale facade");
 
     // Force a fresh install before loading the minified artifact, otherwise the
@@ -171,6 +179,7 @@
 
     result = "ESUUID_LIVE_PASS|" + checks + "|Illustrator=" + app.version + "|ExtendScript=" + $.version;
   } finally {
+    $.global.__ESUUID_WARN__ = previousWarn;
     $.global.ESUUID = previousUuid;
     $.global.ESRAND = previousRand;
   }

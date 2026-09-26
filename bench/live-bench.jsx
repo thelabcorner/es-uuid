@@ -26,17 +26,22 @@
     $.global.ESUUID = void 0;
 
     var T = load(estimerPath, "ESTIMER");
-    var R = load(esrandPath, "ESRAND");
+    var isMathFallbackLane = lane === "v4-math" || lane === "v7-math";
+    var R = null;
+    if (!isMathFallbackLane) R = load(esrandPath, "ESRAND");
     var U = load(esuuidPath, "ESUUID");
 
     var fixed = [], i;
     for (i = 0; i < 16; i++) fixed[i] = (i * 29 + 17) & 255;
     var parsed = U.parse("919108f7-52d1-4320-9bac-f847db4148a8");
-    var seeded = R.create("esuuid-live-benchmark|" + lane);
-    var generator = U.create({
-      rand: seeded,
-      now: function () { return 1700000000000; }
-    });
+    var generator = null;
+    if (R !== null) {
+      var seeded = R.create("esuuid-live-benchmark|" + lane);
+      generator = U.create({
+        rand: seeded,
+        now: function () { return 1700000000000; }
+      });
+    }
 
     var batch = 0;
     var op = null;
@@ -45,12 +50,18 @@
     if (lane === "v4-esrand") {
       batch = 250;
       op = function () { sink = generator.v4(); };
+    } else if (lane === "v4-math") {
+      batch = 250;
+      op = function () { sink = U.v4(); };
     } else if (lane === "v4-explicit") {
       batch = 500;
       op = function () { sink = U.v4({random:fixed}); };
     } else if (lane === "v7-esrand") {
       batch = 250;
       op = function () { sink = generator.v7(); };
+    } else if (lane === "v7-math") {
+      batch = 250;
+      op = function () { sink = U.v7(); };
     } else if (lane === "v7-explicit") {
       batch = 500;
       op = function () { sink = U.v7({random:fixed,msecs:1700000000000,seq:0x12345678}); };

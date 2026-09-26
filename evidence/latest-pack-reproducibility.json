@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "kind": "esuuid-pack-reproducibility",
-  "capturedAt": "2026-09-26T08:18:03.357Z",
+  "capturedAt": "2026-09-26T08:31:28.414Z",
   "node": "v22.23.2",
   "package": {
     "filename": "esuuid-0.1.0.tgz",
-    "bytes": 86034,
-    "npmShasum": "37a6652f0f48ad08c4ac4bdfcb55aa464e05f838",
-    "npmIntegrity": "sha512-KmReTAeKaWgBY745Db/Is12/YFAn6eadfbuU7t9r3XpnYuvfJ6YNzMNJbG5fdragqa1sYaoahtbBgerOniRKMg==",
+    "bytes": 88692,
+    "npmShasum": "c7a20935417b455053872c92907b2e823e0ceb38",
+    "npmIntegrity": "sha512-hJc7QIAEAQ10yGqnPzs+gE5pnL7mZpNvv79tnFV+HBjz3wE26VKoLlMVlNRtuSkMEnhmuB2SduZ6AaKVR0dQFw==",
     "entryCount": 41
   },
   "install": "npm install --ignore-scripts in clean extracted tarball",
@@ -16,28 +16,28 @@
   "artifacts": [
     {
       "file": "dist/ESUUID.jsx",
-      "bytes": 17927,
-      "sha256": "db2a20c67b1eeca8723a04e7f93596c29f766868532efcd6c45788d52f0c091d"
+      "bytes": 18746,
+      "sha256": "e217d0c3da1fc087ee00757fb475878277d3f107b1cdc0de46c060f4a44f941b"
     },
     {
       "file": "dist/ESUUID.min.jsx",
-      "bytes": 13977,
-      "sha256": "34d0f7121ccc12ff536a8b38cfd75c265ba8a9e05ac332616bb4da72945c654e"
+      "bytes": 14595,
+      "sha256": "e9930f70f86542a5d4947f2e46e656d212dbe7c9dfbef921346994cfe899afa8"
     },
     {
       "file": "dist/vendor-esuuid.js",
-      "bytes": 17927,
-      "sha256": "db2a20c67b1eeca8723a04e7f93596c29f766868532efcd6c45788d52f0c091d"
+      "bytes": 18746,
+      "sha256": "e217d0c3da1fc087ee00757fb475878277d3f107b1cdc0de46c060f4a44f941b"
     },
     {
       "file": "dist/vendor-esuuid.min.js",
-      "bytes": 13977,
-      "sha256": "34d0f7121ccc12ff536a8b38cfd75c265ba8a9e05ac332616bb4da72945c654e"
+      "bytes": 14595,
+      "sha256": "e9930f70f86542a5d4947f2e46e656d212dbe7c9dfbef921346994cfe899afa8"
     },
     {
       "file": "dist/esuuid-core.esm.mjs",
-      "bytes": 20426,
-      "sha256": "1b372722d0cf7bbb92fc33c41fb51f3d903221d2ca5a28422bf4d835f6fb192d"
+      "bytes": 20459,
+      "sha256": "e5509d2551187b1992075743775a2579981318f090b57276fbc941c50a29eb33"
     }
   ]
 }

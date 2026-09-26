@@ -45,7 +45,9 @@ Do not update tests simply to bless an unexplained divergence.
 
 ## Entropy rules
 
-- Never silently fall back to `Math.random()`.
+- The ExtendScript facade may fall back to `Math.random()` only when ESRAND
+  and caller-provided entropy are both absent. That path must stay explicitly
+  non-cryptographic and emit a one-time warning on first entropy use.
 - Preserve the explicit `random` / `rng` / `rand.bytes(count)` contracts.
 - ESRAND integration must remain truthfully marked non-cryptographic.
 - Changes to default generator state behavior require both Node and live-engine tests.

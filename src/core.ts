@@ -369,7 +369,10 @@ function randomFrom(options: RandomOptions | undefined, fallback: RandomBytesFn 
   if (options !== undefined && options.random !== undefined) return clonePrefixBytes(options.random, 16, 'UUID random');
   var fn = options !== undefined && options.rng !== undefined ? options.rng : fallback;
   if (fn === null || fn === undefined) {
-    throw new Error('ESUUID requires ESRAND or an injected 16-byte RNG; Math.random() is never used as an entropy fallback');
+    throw new Error(
+      'ESUUID core requires an injected 16-byte RNG; the ExtendScript facade supplies ESRAND ' +
+      'or its warned Math.random() fallback'
+    );
   }
   return clonePrefixBytes(fn(), 16, 'UUID RNG result');
 }

@@ -4,14 +4,14 @@
 
 ## ExtendScript UUID = E.S.UUID
 
-### UUID v1/v3/v4/v5/v6/v7 generation, parsing, validation, conversion, and ESRAND-backed entropy for Adobe ExtendScript hosts
+### UUID v1/v3/v4/v5/v6/v7 generation, parsing, validation, conversion, ESRAND-preferred entropy, and a warned Math.random fallback for Adobe ExtendScript hosts
 
 [![RFC 9562](https://img.shields.io/badge/RFC%209562-Appendix%20A%206%2F6-success)](https://www.rfc-editor.org/rfc/rfc9562)
 [![Differential](https://img.shields.io/badge/differential-3%2C225%20uuid%4014.0.2%20checks-purple)](#validation)
-[![Illustrator](https://img.shields.io/badge/Illustrator%2030.6.0-48%2F48%20live-success)](#compatibility)
+[![Illustrator](https://img.shields.io/badge/Illustrator%2030.6.0-54%2F54%20live-success)](#compatibility)
 [![Adobe: Creative Suite](https://img.shields.io/badge/Adobe%20-Creative%20Suite-red?logo=adobe&logoColor=white)](https://extendscript.docsforadobe.dev/)
 [![Engine](https://img.shields.io/badge/ExtendScript-ES3-green)](#compatibility)
-[![Size](https://img.shields.io/badge/minified-14.0%20KB-orange)](#which-artifact-should-i-use)
+[![Size](https://img.shields.io/badge/minified-14.6%20KB-orange)](#which-artifact-should-i-use)
 [![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL%203.0--or--later-blue)](https://www.gnu.org/licenses/gpl-3.0.html)
 
 </div>
@@ -112,9 +112,9 @@ Also from the same team: **[ArcFit.dev](https://arcfit.dev)**, deterministic arc
 
 ## Why ESUUID?
 
-ExtendScript is an ES3-era runtime with no standardized UUID API equivalent to modern `crypto.randomUUID()`. ESUUID provides the RFC 9562 UUID surface directly in ExtendScript syntax while keeping entropy ownership explicit instead of silently substituting `Math.random()`.
+ExtendScript is an ES3-era runtime with no standardized UUID API equivalent to modern `crypto.randomUUID()`. ESUUID provides the RFC 9562 UUID surface directly in ExtendScript syntax with an explicit entropy priority: caller-provided bytes/RNG, then ESRAND, then a warned non-cryptographic `Math.random()` fallback.
 
-The default Adobe-host facade integrates with [ESRAND](https://github.com/thelabcorner/es-rand) when it is already installed as `$.global.ESRAND`. The live Illustrator 30.6.0 / ExtendScript 4.5.6 probe verifies both paths: ESRAND-backed v4/v7 generation works, and a fresh ESUUID load without ESRAND reports `entropy: "injected-only"` and rejects default random UUID generation rather than falling back to `Math.random()`.
+The default Adobe-host facade integrates with [ESRAND](https://github.com/thelabcorner/es-rand) when it is already installed as `$.global.ESRAND`. If ESRAND is missing and the caller does not provide entropy, ESUUID falls back to `Math.random()`, reports `entropy: "Math.random-fallback"`, and emits a one-time warning on the first fallback entropy request.
 
 ESUUID also targets the public API shape developers already know from `uuidjs/uuid` where that mapping is meaningful in ExtendScript. Differential validation currently covers 3,225 parity checks against `uuid@14.0.2`.
 
@@ -132,10 +132,10 @@ ESUUID also targets the public API shape developers already know from `uuidjs/uu
 - Stateful v1/v6 generation and monotonic v7 sequencing through `create()`.
 - ESRAND-backed default entropy in Adobe hosts when `$.global.ESRAND.bytes(count)` is available.
 - Caller-injected `rng`, `rand`, and `now` sources for deterministic tests or custom integrations.
-- No `Math.random()` entropy fallback.
+- Warned `Math.random()` fallback when ESRAND and caller entropy are both unavailable.
 - Same-version global reload preserves the existing facade and stateful v1/v7 generator state.
 - Fresh minified and unminified artifacts are both exercised inside real Illustrator.
-- **55** unit checks, **3,225** differential checks, **75,000** fuzz invariants, and **48/48** live Illustrator checks pass on the current 0.1.0 tree.
+- **55** unit checks, **3,225** differential checks, **75,000** fuzz invariants, and **54/54** live Illustrator checks pass on the current 0.1.0 tree.
 
 ---
 
@@ -143,11 +143,11 @@ ESUUID also targets the public API shape developers already know from `uuidjs/uu
 
 | Artifact | Size | Surface | Use it when |
 |---|---:|---|---|
-| `dist/ESUUID.min.jsx` | 13,977 bytes | Installs `$.global.ESUUID` | Default production ExtendScript script include |
-| `dist/ESUUID.jsx` | 17,927 bytes | Installs `$.global.ESUUID` | Readable/debuggable ExtendScript build |
-| `dist/vendor-esuuid.min.js` | 13,977 bytes | Installs `$.global.ESUUID` | Vendoring into another generated bundle |
-| `dist/vendor-esuuid.js` | 17,927 bytes | Installs `$.global.ESUUID` | Readable vendor input |
-| `dist/esuuid-core.esm.mjs` | 20,426 bytes | ESM exports | Node-side tests, differential validation, or tooling |
+| `dist/ESUUID.min.jsx` | 14,595 bytes | Installs `$.global.ESUUID` | Default production ExtendScript script include |
+| `dist/ESUUID.jsx` | 18,746 bytes | Installs `$.global.ESUUID` | Readable/debuggable ExtendScript build |
+| `dist/vendor-esuuid.min.js` | 14,595 bytes | Installs `$.global.ESUUID` | Vendoring into another generated bundle |
+| `dist/vendor-esuuid.js` | 18,746 bytes | Installs `$.global.ESUUID` | Readable vendor input |
+| `dist/esuuid-core.esm.mjs` | 20,459 bytes | ESM exports | Node-side tests, differential validation, or tooling |
 
 The four ExtendScript artifacts are generated from the same `src/jsx-entry.ts` entry point. Their current byte sizes come from the standalone, public-reproducible build using the pinned ESTC GitHub dependency.
 
@@ -161,7 +161,7 @@ The four ExtendScript artifacts are generated from the same `src/jsx-entry.ts` e
 
 ESUUID ships generated `dist/` artifacts in the repository so a consumer does not need the TypeScript build toolchain just to use the library.
 
-Load ESRAND first when you want ESUUID's default random UUID methods:
+Load ESRAND first when you want ESUUID's preferred default entropy backend:
 
 ```jsx
 $.evalFile(File("/path/to/vendor-esrand.js"));
@@ -189,9 +189,19 @@ npm run build
 
 The build uses the pinned ESTC source archive installed by `npm ci` by default. Inside the wider toolkit workspace, set `ESUUID_USE_WORKSPACE_ESTC=1` to opt into the sibling `../extendscript-toolchain` checkout.
 
-### Inject entropy instead of ESRAND
+### Run without ESRAND
 
-ESUUID can load without ESRAND. Random generation then requires an explicit entropy source:
+ESUUID can load without ESRAND. If you call a random UUID method without
+supplying entropy, the Adobe facade falls back to `Math.random()`, emits a
+one-time warning, and continues:
+
+```jsx
+$.evalFile(File("/path/to/ESUUID.min.jsx"));
+
+var id = ESUUID.v4(); // works, warns once that Math.random() is being used
+```
+
+For deterministic or stronger externally-supplied entropy, inject a source:
 
 ```jsx
 $.evalFile(File("/path/to/ESUUID.min.jsx"));
@@ -349,7 +359,9 @@ entropy:       ESRAND
 cryptographic: false
 ```
 
-Without ESRAND, `entropy` reports `injected-only`.
+Without ESRAND, `entropy` reports `Math.random-fallback`. That state is
+deliberately non-cryptographic and the first actual fallback entropy request
+emits a warning.
 
 ---
 
@@ -364,8 +376,8 @@ Current 0.1.0 validation on the public-reproducible build:
 | Unit suite | `npm test` | 55/55 checks |
 | Differential parity | `npm run differential` | 3,225/3,225 checks vs. `uuid@14.0.2` |
 | Seeded invariants | `npm run fuzz` | 75,000/75,000 checks |
-| Live Illustrator | `npm run live-verify -- --pipe <runtime>` | 48/48 checks on Illustrator 30.6.0 / ExtendScript 4.5.6 |
-| Live host benchmark | `npm run live-benchmark -- --pipe <runtime> --rounds 3` | 7/7 benchmark lanes completed, 0 rejected samples |
+| Live Illustrator | `npm run live-verify -- --pipe <runtime>` | 54/54 checks on Illustrator 30.6.0 / ExtendScript 4.5.6 |
+| Live host benchmark | `npm run live-benchmark -- --pipe <runtime> --rounds 3` | 9/9 benchmark lanes completed, 0 rejected samples |
 
 The differential oracle is [uuidjs/uuid](https://github.com/uuidjs/uuid), version 14.0.2. The live check runs the actual generated `ESUUID.jsx` and `ESUUID.min.jsx` artifacts through COM Tool V2 `script.runFile`, and dogfoods the real sibling ESRAND distribution.
 
@@ -400,15 +412,21 @@ Protocol: one benchmark lane per `script.runFile`; ESTIMER prime; 5 warmups; 9 m
 
 | Lane | Median us/op | Min us/op | p95 us/op | Median ops/s |
 |---|---:|---:|---:|---:|
-| v4, ESRAND entropy | 83.044 | 73.348 | 90.968 | 12,042 |
-| v4, explicit bytes | 66.748 | 63.284 | 74.830 | 14,982 |
-| v7, ESRAND entropy | 96.132 | 88.672 | 106.736 | 10,402 |
-| v7, explicit bytes | 84.152 | 72.592 | 87.556 | 11,883 |
-| parse | 213.230 | 200.398 | 223.100 | 4,690 |
-| stringify | 160.222 | 150.671 | 169.721 | 6,241 |
-| v5 | 1,645.600 | 1,537.000 | 1,763.900 | 608 |
+| v4, ESRAND entropy | 81.092 | 68.316 | 89.552 | 12,332 |
+| v4, Math.random fallback | 85.544 | 72.324 | 97.416 | 11,690 |
+| v4, explicit bytes | 61.000 | 56.930 | 64.134 | 16,393 |
+| v7, ESRAND entropy | 86.284 | 66.128 | 96.800 | 11,590 |
+| v7, Math.random fallback | 106.576 | 95.096 | 119.384 | 9,383 |
+| v7, explicit bytes | 72.306 | 57.964 | 79.088 | 13,830 |
+| parse | 190.027 | 180.655 | 202.872 | 5,262 |
+| stringify | 143.352 | 123.814 | 149.349 | 6,976 |
+| v5 | 1,526.480 | 1,377.020 | 1,692.940 | 655 |
 
-These are host-engine measurements, not Node throughput estimates. Re-run `npm run live-benchmark` on the target Adobe host before using them as a capacity estimate for a different machine or application.
+The `Math.random` lanes measure steady-state fallback generation after the
+one-time warning has already been emitted during warmup. These are host-engine
+measurements, not Node throughput estimates. Re-run `npm run live-benchmark`
+on the target Adobe host before using them as a capacity estimate for a
+different machine or application.
 
 A separate Node microbenchmark exists under `tests/benchmark.mjs` for development regression checks.
 
@@ -424,7 +442,8 @@ Consequences:
 
 - Do not use ESUUID-generated UUIDs as passwords, bearer tokens, API secrets, session secrets, or cryptographic nonces.
 - UUIDv3 uses MD5 and UUIDv5 uses SHA-1 because those hash functions are part of the specified UUID version algorithms. Their presence is not a recommendation to use MD5/SHA-1 for general-purpose security.
-- If ESRAND is missing, ESUUID does **not** silently fall back to `Math.random()`. Random UUID methods require an injected byte source.
+- If ESRAND and caller entropy are both missing, ESUUID falls back to `Math.random()`, emits a one-time warning, and reports `entropy: "Math.random-fallback"`.
+- The `Math.random()` fallback is non-cryptographic and may be predictable; inject a CSPRNG-backed source for security-sensitive identifiers.
 - Caller-supplied entropy is trusted as supplied. ESUUID validates byte shape and bounds, not randomness quality.
 
 For ordinary identifiers, deterministic fixtures, namespace UUIDs, and time-ordered UUIDs inside ExtendScript automation, the entropy contract is explicit and inspectable.
@@ -435,7 +454,7 @@ For ordinary identifiers, deterministic fixtures, namespace UUIDs, and time-orde
 
 | Target | Status |
 |---|---|
-| Adobe Illustrator 30.6.0 | 48/48 live checks pass |
+| Adobe Illustrator 30.6.0 | 54/54 live checks pass |
 | ExtendScript 4.5.6 | live verified |
 | ExtendScript ES3 grammar | 4/4 generated artifacts pass ESTC `acorn-ecma3` checks |
 | Other Adobe ExtendScript hosts | ES3-compatible build; not yet separately live-certified |
@@ -461,7 +480,7 @@ A naive `$.evalFile()` reload would replace the facade and reset the state used 
 
 ### Entropy availability can change during a host session
 
-A script may load ESUUID before ESRAND and install ESRAND later. ESUUID therefore distinguishes `ESRAND` from `injected-only` capability state. Re-evaluating ESUUID after ESRAND becomes available upgrades the facade instead of preserving a stale injected-only backend.
+A script may load ESUUID before ESRAND and install ESRAND later. ESUUID therefore distinguishes `ESRAND` from `Math.random-fallback` capability state. Re-evaluating ESUUID after ESRAND becomes available upgrades the facade instead of preserving a stale fallback backend.
 
 ### Minified output must be tested as a separate runtime artifact
 
@@ -505,7 +524,7 @@ npm run live-benchmark -- --pipe <runtime-pipe> --rounds 3
 npm run release:gate -- --pipe <runtime-pipe> --target <target-id>
 ```
 
-`npm run release:gate` runs the portable/full verification, the exact 48-check live Illustrator contract, a clean packed-tarball install/rebuild, the evidence/document synchronization gate, and the release manifest/checksum generator. The live benchmark is intentionally separate because its evidence remains valid only while its recorded ESUUID/ESRAND/ESTIMER artifact hashes match the current bytes.
+`npm run release:gate` runs the portable/full verification, the exact 54-check live Illustrator contract, a clean packed-tarball install/rebuild, the evidence/document synchronization gate, and the release manifest/checksum generator. The live benchmark is intentionally separate because its evidence remains valid only while its recorded ESUUID/ESRAND/ESTIMER artifact hashes match the current bytes.
 
 The V2 harness prefers the stable per-user COM Tool V2 install at `%LOCALAPPDATA%\Programs\ComToolV2\current\ComTool.Cli.exe`, falls back to the toolkit workspace Release CLI when present, and accepts `COMTOOL_V2_CLI` / `--cli` as an explicit override. If another COM Tool runtime owns Illustrator, live gates wait safely for up to 60 seconds by default without stealing the lease; set `COMTOOL_V2_LEASE_WAIT_MS` or `--lease-wait-ms` to change that bound.
 

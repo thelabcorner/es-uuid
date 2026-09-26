@@ -1,5 +1,7 @@
 node_modules/
 tests/.tmp/
+.esuuid-build.lock
+dist/*.estc.*
 __pycache__/
 *.py[cod]
 *.log

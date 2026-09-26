@@ -84,7 +84,7 @@ eq(buffer[2 + 6], 0x40, 'buffer version byte');
 eq(buffer[2 + 8], 0x80, 'buffer variant byte');
 throws(() => g.v4({ random: new Array(16).fill(0) }, new Array(15), 0), RangeError, 'short buffer rejected');
 throws(() => g.v4({ random: new Array(16).fill(0) }, new Array(16), -1), RangeError, 'negative offset rejected');
-throws(() => create().v4(), Error, 'no silent Math.random fallback');
+throws(() => create().v4(), Error, 'core stays injection-only; host facade owns entropy fallback policy');
 
 // Monotonic v7 for equal and backwards wall clock.
 let now = 1700000000000;
