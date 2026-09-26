@@ -412,15 +412,15 @@ Protocol: one benchmark lane per `script.runFile`; ESTIMER prime; 5 warmups; 9 m
 
 | Lane | Median us/op | Min us/op | p95 us/op | Median ops/s |
 |---|---:|---:|---:|---:|
-| v4, ESRAND entropy | 81.092 | 68.316 | 89.552 | 12,332 |
-| v4, Math.random fallback | 85.544 | 72.324 | 97.416 | 11,690 |
-| v4, explicit bytes | 61.000 | 56.930 | 64.134 | 16,393 |
-| v7, ESRAND entropy | 86.284 | 66.128 | 96.800 | 11,590 |
-| v7, Math.random fallback | 106.576 | 95.096 | 119.384 | 9,383 |
-| v7, explicit bytes | 72.306 | 57.964 | 79.088 | 13,830 |
-| parse | 190.027 | 180.655 | 202.872 | 5,262 |
-| stringify | 143.352 | 123.814 | 149.349 | 6,976 |
-| v5 | 1,526.480 | 1,377.020 | 1,692.940 | 655 |
+| v4, ESRAND entropy | 46.856 | 44.824 | 47.872 | 21,342 |
+| v4, Math.random fallback | 52.524 | 51.340 | 56.660 | 19,039 |
+| v4, explicit bytes | 37.308 | 35.836 | 41.146 | 26,804 |
+| v7, ESRAND entropy | 56.012 | 52.464 | 72.820 | 17,853 |
+| v7, Math.random fallback | 60.144 | 59.452 | 64.088 | 16,627 |
+| v7, explicit bytes | 44.094 | 43.138 | 47.030 | 22,679 |
+| parse | 122.081 | 118.234 | 130.118 | 8,191 |
+| stringify | 92.386 | 86.850 | 115.859 | 10,824 |
+| v5 | 897.700 | 885.300 | 922.660 | 1,114 |
 
 The `Math.random` lanes measure steady-state fallback generation after the
 one-time warning has already been emitted during warmup. These are host-engine

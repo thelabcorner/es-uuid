@@ -93,6 +93,20 @@ if (!existsSync(join(packedRoot, 'package.json'))) {
 }
 
 runNpm(['install', '--ignore-scripts'], { cwd: packedRoot, timeoutMs: 300000 });
+
+// The package ships its COM Tool V2 live-control helper. Import it from the
+// extracted tarball after installing only declared dependencies so a hidden
+// sibling-workspace ESTC dependency cannot pass unnoticed.
+run(process.execPath, [
+  '--input-type=module',
+  '-e',
+  [
+    "const m = await import('./tooling/comtool-v2.mjs');",
+    "if (typeof m.parseCommonOptions !== 'function' || typeof m.runFile !== 'function')",
+    "  throw new Error('packed COM Tool V2 helper exports are incomplete');"
+  ].join('\n')
+], { cwd: packedRoot, timeoutMs: 300000 });
+
 runNpm(['run', 'verify'], { cwd: packedRoot, timeoutMs: 300000 });
 
 var artifactPaths = [
@@ -136,6 +150,7 @@ var evidence = {
     entryCount: packInfo[0].entryCount || null
   },
   install: 'npm install --ignore-scripts in clean extracted tarball',
+  toolingImport: 'tooling/comtool-v2.mjs imports from declared pinned ESTC dependency',
   verification: 'npm run verify',
   byteIdentical: true,
   artifacts: artifacts
@@ -170,7 +185,7 @@ if (
 rmSync(TMP, { recursive: true, force: true });
 
 console.log(
-  '[pack:smoke] PASS: clean tarball install + full verify + ' +
+  '[pack:smoke] PASS: clean tarball install + shipped live-tooling import + full verify + ' +
   artifacts.length + '/' + artifacts.length +
   ' byte-identical rebuilt artifacts + stable second pack'
 );

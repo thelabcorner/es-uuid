@@ -64,7 +64,7 @@
   ],
   "devDependencies": {
     "esbuild": "0.28.2",
-    "extendscript-toolchain": "https://codeload.github.com/thelabcorner/estc/tar.gz/b2270f5b58326b5b1ae13ba3263faf151c31e689",
+    "extendscript-toolchain": "https://codeload.github.com/thelabcorner/estc/tar.gz/4b1966e69712a20f5a3739f64a1ba38b01843bf8",
     "typescript": "5.9.3",
     "uglify-js": "3.19.3",
     "uuid": "14.0.2"
@@ -77,5 +77,13 @@
     "type": "git",
     "url": "https://github.com/thelabcorner/es-uuid.git"
   },
-  "keywords": ["uuid","rfc9562","extendscript","es3","adobe","illustrator","esrand"]
+  "keywords": [
+    "uuid",
+    "rfc9562",
+    "extendscript",
+    "es3",
+    "adobe",
+    "illustrator",
+    "esrand"
+  ]
 }

@@ -1,9 +1,21 @@
 #!/usr/bin/env node
-import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { dirname, join, resolve } from 'node:path';
-import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { checkJsxText } from 'extendscript-toolchain/check';
+
+const require = createRequire(import.meta.url);
+const ESTC_ENTRY = require.resolve('extendscript-toolchain');
+const ESTC_ROOT = dirname(dirname(ESTC_ENTRY));
+const SHARED_COMTOOL_ADAPTER = join(ESTC_ROOT, 'src', 'comtool-v2.mjs');
+const sharedComTool = await import(pathToFileURL(SHARED_COMTOOL_ADAPTER).href);
+const {
+  invokeComToolV2,
+  openIllustratorV2,
+  resolveComToolV2,
+  sha256File: sharedSha256File
+} = sharedComTool;
 
 export const PROJECT_ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 export const SCRIPTS_ROOT = dirname(PROJECT_ROOT);
@@ -13,6 +25,7 @@ export const COMTOOL_ROOT = join(
   'illustrator-com-automation-skill',
   'comtool-v2'
 );
+
 var WORKSPACE_CLI = join(
   COMTOOL_ROOT,
   'src',
@@ -22,64 +35,74 @@ var WORKSPACE_CLI = join(
   'net10.0-windows',
   'ComTool.Cli.exe'
 );
+var WORKSPACE_RUNTIME = join(
+  COMTOOL_ROOT,
+  'src',
+  'ComTool.RuntimeHost',
+  'bin',
+  'Release',
+  'net10.0-windows',
+  'ComTool.RuntimeHost.exe'
+);
+var WORKSPACE_WORKER = join(
+  COMTOOL_ROOT,
+  'src',
+  'ComTool.Worker',
+  'bin',
+  'Release',
+  'net10.0-windows',
+  'ComTool.Worker.exe'
+);
 var INSTALLED_CLI = process.env.LOCALAPPDATA
   ? join(process.env.LOCALAPPDATA, 'Programs', 'ComToolV2', 'current', 'ComTool.Cli.exe')
   : null;
 
+function primeSharedLayout() {
+  var explicitCli = process.env.COMTOOL_V2_CLI;
+  var explicitRuntime = process.env.COMTOOL_V2_RUNTIME_HOST;
+  var explicitWorker = process.env.COMTOOL_V2_WORKER;
+
+  // Preserve caller authority. The shared ESTC resolver validates that an
+  // explicit layout is all-or-nothing and version-coherent.
+  if (explicitCli || explicitRuntime || explicitWorker) return;
+
+  // A stable per-user installation, when present, is already understood by
+  // the shared adapter.
+  try {
+    resolveComToolV2();
+    return;
+  } catch (_) {}
+
+  // When ESUUID is running inside the toolkit workspace, the pinned ESTC npm
+  // dependency cannot infer the sibling COM-tool root from node_modules.
+  // Promote the complete workspace triplet into ESTC's explicit-layout
+  // contract rather than importing a mutable sibling ESTC checkout.
+  if (
+    existsSync(WORKSPACE_CLI) &&
+    existsSync(WORKSPACE_RUNTIME) &&
+    existsSync(WORKSPACE_WORKER)
+  ) {
+    process.env.COMTOOL_V2_CLI = WORKSPACE_CLI;
+    process.env.COMTOOL_V2_RUNTIME_HOST = WORKSPACE_RUNTIME;
+    process.env.COMTOOL_V2_WORKER = WORKSPACE_WORKER;
+  }
+}
+
 function resolveDefaultCli() {
-  // Prefer the stable per-user production install. The workspace build is a
-  // development fallback so this harness also works from a standalone ESUUID
-  // clone rather than requiring the parent Adobe Scripts monorepo layout.
-  if (INSTALLED_CLI && existsSync(INSTALLED_CLI)) return INSTALLED_CLI;
-  if (existsSync(WORKSPACE_CLI)) return WORKSPACE_CLI;
-  return INSTALLED_CLI || WORKSPACE_CLI;
+  primeSharedLayout();
+  try {
+    return resolveComToolV2().cli;
+  } catch (_) {
+    if (INSTALLED_CLI && existsSync(INSTALLED_CLI)) return INSTALLED_CLI;
+    if (existsSync(WORKSPACE_CLI)) return WORKSPACE_CLI;
+    return INSTALLED_CLI || WORKSPACE_CLI;
+  }
 }
 
 export const DEFAULT_CLI = resolveDefaultCli();
 
-function cliError(label, envelope, stderr, status) {
-  var detail = envelope && envelope.error
-    ? envelope.error.kind + ': ' + envelope.error.message
-    : (stderr || 'exit ' + status);
-  var error = new Error(label + ' failed: ' + detail);
-  error.envelope = envelope;
-  error.exitCode = status;
-  return error;
-}
-
 export function invokeCli(cliPath, args, options = {}) {
-  if (!existsSync(cliPath)) {
-    throw new Error(
-      'COM Tool V2 CLI not found at ' + cliPath +
-      '. Install COM Tool V2, build the workspace Release CLI, or pass --cli <path>.'
-    );
-  }
-
-  var proc = spawnSync(cliPath, args, {
-    cwd: options.cwd || dirname(cliPath),
-    encoding: 'utf8',
-    windowsHide: true,
-    timeout: options.timeoutMs || 300000,
-    maxBuffer: options.maxBuffer || (16 * 1024 * 1024)
-  });
-  if (proc.error) throw proc.error;
-
-  var stdout = (proc.stdout || '').trim();
-  var envelope = null;
-  if (stdout) {
-    try {
-      envelope = JSON.parse(stdout);
-    } catch (error) {
-      throw new Error(
-        'COM Tool V2 returned non-JSON output for ' + args[0] + ': ' +
-        stdout.slice(0, 800)
-      );
-    }
-  }
-  if (proc.status !== 0 || !envelope || envelope.ok !== true) {
-    throw cliError(args[0], envelope, (proc.stderr || '').trim(), proc.status);
-  }
-  return envelope;
+  return invokeComToolV2(cliPath, args, options);
 }
 
 export function resultValue(envelope) {
@@ -89,153 +112,162 @@ export function resultValue(envelope) {
 export function parseCommonOptions(argv) {
   var out = {
     cli: process.env.COMTOOL_V2_CLI || DEFAULT_CLI,
-    pipe: process.env.COMTOOL_V2_PIPE || 'comtool-v2-runtime-1',
+    pipe: process.env.COMTOOL_V2_PIPE || null,
     target: process.env.COMTOOL_V2_TARGET || null,
     leaseWaitMs: process.env.COMTOOL_V2_LEASE_WAIT_MS
       ? Number(process.env.COMTOOL_V2_LEASE_WAIT_MS)
-      : 60000
+      : 60000,
+    launch: false,
+    _session: null,
+    _cleanupRegistered: false
   };
+
   for (var i = 0; i < argv.length; i++) {
     if (argv[i] === '--cli' && i + 1 < argv.length) out.cli = resolve(argv[++i]);
     else if (argv[i] === '--pipe' && i + 1 < argv.length) out.pipe = argv[++i];
     else if (argv[i] === '--target' && i + 1 < argv.length) out.target = argv[++i];
     else if (argv[i] === '--lease-wait-ms' && i + 1 < argv.length) out.leaseWaitMs = Number(argv[++i]);
+    else if (argv[i] === '--launch') out.launch = true;
+    else if (argv[i] === '--no-launch') out.launch = false;
   }
+
   if (!Number.isFinite(out.leaseWaitMs) || out.leaseWaitMs < 0) {
     throw new Error('--lease-wait-ms / COMTOOL_V2_LEASE_WAIT_MS must be a non-negative number');
   }
   return out;
 }
 
-export function discoverIllustratorTarget(config) {
-  var envelope = invokeCli(config.cli, ['targets', '--runtime', '--pipe', config.pipe]);
-  var targets = resultValue(envelope);
-  if (!Array.isArray(targets)) throw new Error('COM Tool V2 targets result is not an array');
+function assertCliMatchesSharedLayout(config) {
+  var layout = resolveComToolV2();
+  if (
+    config.cli &&
+    resolve(config.cli).toLowerCase() !== resolve(layout.cli).toLowerCase()
+  ) {
+    throw new Error(
+      'ESUUID now uses the shared COM Tool V2 runtime adapter. A custom --cli ' +
+      'cannot be supplied by itself because RuntimeHost/Worker versions must ' +
+      'match. Use COMTOOL_V2_CLI, COMTOOL_V2_RUNTIME_HOST, and ' +
+      'COMTOOL_V2_WORKER together.'
+    );
+  }
+  return layout;
+}
 
-  var candidates = targets.filter(function (entry) {
-    if (!entry || !entry.running || !entry.target || entry.target.host !== 'illustrator') return false;
-    if (config.target && entry.target.id !== config.target) return false;
-    var caps = Array.isArray(entry.capabilities) ? entry.capabilities : [];
-    return caps.some(function (cap) {
-      return cap && cap.name === 'script.runFile' && cap.supported === true;
-    });
+function closeConfigSession(config) {
+  if (!config || !config._session) return;
+  var session = config._session;
+  config._session = null;
+  try { session.close(); } catch (_) {}
+}
+
+function ensureSession(config, ttlMs = 180000) {
+  if (config._session) return config._session;
+  assertCliMatchesSharedLayout(config);
+  var session = openIllustratorV2({
+    launch: config.launch === true,
+    target: config.target || null,
+    pipe: config.pipe || null,
+    leaseWaitMs: config.leaseWaitMs,
+    leaseTtlMs: ttlMs
   });
+  config._session = session;
+  config.cli = session.layout.cli;
+  config.pipe = session.pipe;
+  config.target = session.targetId;
 
-  if (candidates.length === 0) {
+  if (!config._cleanupRegistered) {
+    config._cleanupRegistered = true;
+    process.once('exit', function () {
+      closeConfigSession(config);
+    });
+  }
+  return session;
+}
+
+function assertTarget(session, targetId) {
+  if (targetId && session.targetId !== targetId) {
     throw new Error(
-      config.target
-        ? 'Requested Illustrator target is not running with script.runFile support: ' + config.target
-        : 'No running Illustrator target advertises COM Tool V2 script.runFile'
+      'COM Tool V2 target changed unexpectedly: expected ' +
+      targetId + ', got ' + session.targetId
     );
   }
-  if (!config.target && candidates.length > 1) {
+}
+
+function assertLease(session, leaseId) {
+  if (leaseId && session.leaseId !== leaseId) {
     throw new Error(
-      'Multiple Illustrator targets advertise script.runFile; pass --target <id>: ' +
-      candidates.map(function (entry) { return entry.target.id; }).join(', ')
+      'COM Tool V2 lease changed unexpectedly: expected ' +
+      leaseId + ', got ' + session.leaseId
     );
   }
-  return candidates[0];
+}
+
+export function discoverIllustratorTarget(config) {
+  var session = ensureSession(config);
+  return session.target;
 }
 
 export function acquireLease(config, targetId, ttlMs = 180000) {
-  var envelope = invokeCli(config.cli, [
-    'lease-acquire', '--runtime',
-    '--pipe', config.pipe,
-    '--target', targetId,
-    '--ttl-ms', String(ttlMs)
-  ]);
-  var value = resultValue(envelope);
-  if (!value || !value.leaseId) throw new Error('COM Tool V2 lease response omitted leaseId');
-  return value.leaseId;
-}
-
-function sleepSync(ms) {
-  if (!(ms > 0)) return;
-  var cell = new Int32Array(new SharedArrayBuffer(4));
-  Atomics.wait(cell, 0, 0, ms);
+  var session = ensureSession(config, ttlMs);
+  assertTarget(session, targetId);
+  return session.leaseId;
 }
 
 export function acquireLeaseWithRetry(config, targetId, ttlMs = 180000) {
-  var waitMs = config.leaseWaitMs === undefined ? 60000 : config.leaseWaitMs;
-  var deadline = Date.now() + waitMs;
-  var announced = false;
-  while (true) {
-    try {
-      return acquireLease(config, targetId, ttlMs);
-    } catch (error) {
-      var envelope = error && error.envelope ? error.envelope : null;
-      var runtimeError = envelope && envelope.error ? envelope.error : null;
-      if (!runtimeError ||
-          runtimeError.kind !== 'target_leased_external' ||
-          runtimeError.retryable !== true ||
-          Date.now() >= deadline) {
-        throw error;
-      }
-      if (!announced) {
-        console.error(
-          '[comtool-v2] target is leased by another runtime; waiting up to ' +
-          waitMs + ' ms without stealing ownership'
-        );
-        announced = true;
-      }
-      sleepSync(Math.min(1000, Math.max(1, deadline - Date.now())));
-    }
-  }
+  // openIllustratorV2 already owns the bounded retry policy for externally
+  // leased targets; preserve this legacy helper name for ESUUID callers.
+  return acquireLease(config, targetId, ttlMs);
 }
 
 export function releaseLease(config, targetId, leaseId) {
-  if (!leaseId) return;
-  invokeCli(config.cli, [
-    'lease-release', '--runtime',
-    '--pipe', config.pipe,
-    '--target', targetId,
-    '--lease', leaseId
-  ]);
+  if (!config || !config._session) return;
+  assertTarget(config._session, targetId);
+  assertLease(config._session, leaseId);
+  closeConfigSession(config);
 }
 
 export function renewLease(config, targetId, leaseId, ttlMs = 300000) {
-  var envelope = invokeCli(config.cli, [
-    'lease-renew', '--runtime',
-    '--pipe', config.pipe,
-    '--target', targetId,
-    '--lease', leaseId,
-    '--ttl-ms', String(ttlMs)
-  ]);
-  var value = resultValue(envelope);
-  if (!value || !value.leaseId) throw new Error('COM Tool V2 lease renewal omitted leaseId');
-  return value.leaseId;
+  var session = ensureSession(config, ttlMs);
+  assertTarget(session, targetId);
+  assertLease(session, leaseId);
+  return session.renewLease(ttlMs);
 }
 
-export function sha256File(path) {
-  return createHash('sha256').update(readFileSync(path)).digest('hex');
+export function sha256File(file) {
+  return sharedSha256File(file);
 }
 
-export function assertExtendScriptArtifactSafe(path, label = 'ExtendScript artifact') {
-  if (!existsSync(path)) throw new Error(label + ' not found: ' + path);
-  var source = readFileSync(path, 'utf8');
-  var forbidden = ['defineProperty', 'getOwnPropertyDescriptor', 'getOwnPropertyNames'];
-  for (var i = 0; i < forbidden.length; i++) {
-    if (source.indexOf(forbidden[i]) !== -1) {
-      throw new Error(
-        label + ' contains forbidden generated module helper dependency ' +
-        forbidden[i] + ': ' + path
-      );
-    }
+export function assertExtendScriptArtifactSafe(file, label = 'ExtendScript artifact') {
+  if (!existsSync(file)) throw new Error(label + ' not found: ' + file);
+  var source = readFileSync(file, 'utf8');
+  var checked = checkJsxText(source, {
+    file: file,
+    mode: 'conservative',
+    target: 'illustrator',
+    requireTarget: false,
+    allowIncludes: false,
+    allowJson: false,
+    allowedMissingBuiltins: [],
+    allowedGlobalPatches: []
+  });
+  if (!checked.ok) {
+    var errors = checked.diagnostics
+      .filter(function (d) { return d.severity === 'error'; })
+      .map(function (d) {
+        return d.code + ' ' + (d.line || 0) + ':' + (d.column || 0) + ' ' + d.message;
+      });
+    throw new Error(label + ' failed ESTC compatibility: ' + errors.join('; '));
   }
 }
 
 export function runFile(config, options) {
-  var args = [
-    'run-file', '--runtime',
-    '--pipe', config.pipe,
-    '--lease', options.leaseId,
-    '--request-id', options.requestId,
-    '--path', resolve(options.path),
-    '--sha256', options.sha256 || sha256File(options.path),
-    '--target', options.targetId
-  ];
-  if (options.args !== undefined) {
-    args.push('--args-json', JSON.stringify(options.args));
-  }
-  return invokeCli(config.cli, args, { timeoutMs: options.timeoutMs || 300000 });
+  var session = ensureSession(config, options.timeoutMs || 300000);
+  assertTarget(session, options.targetId);
+  assertLease(session, options.leaseId);
+  return session.runFileEnvelope(options.path, {
+    requestId: options.requestId,
+    sha256: options.sha256 || sha256File(options.path),
+    args: options.args,
+    timeoutMs: options.timeoutMs || 300000
+  });
 }

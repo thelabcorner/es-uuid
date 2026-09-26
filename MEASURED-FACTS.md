@@ -78,15 +78,15 @@ Environment and protocol:
 
 | Lane | Median us/op | p95 us/op | Median ops/s |
 |---|---:|---:|---:|
-| v4 + ESRAND | 81.092 | 89.552 | 12,332 |
-| v4 + Math.random fallback | 85.544 | 97.416 | 11,690 |
-| v4 explicit bytes | 61.000 | 64.134 | 16,393 |
-| v7 + ESRAND | 86.284 | 96.800 | 11,590 |
-| v7 + Math.random fallback | 106.576 | 119.384 | 9,383 |
-| v7 explicit bytes/time/sequence | 72.306 | 79.088 | 13,830 |
-| parse | 190.027 | 202.872 | 5,262 |
-| stringify | 143.352 | 149.349 | 6,976 |
-| v5 | 1,526.480 | 1,692.940 | 655 |
+| v4 + ESRAND | 46.856 | 47.872 | 21,342 |
+| v4 + Math.random fallback | 52.524 | 56.660 | 19,039 |
+| v4 explicit bytes | 37.308 | 41.146 | 26,804 |
+| v7 + ESRAND | 56.012 | 72.820 | 17,853 |
+| v7 + Math.random fallback | 60.144 | 64.088 | 16,627 |
+| v7 explicit bytes/time/sequence | 44.094 | 47.030 | 22,679 |
+| parse | 122.081 | 130.118 | 8,191 |
+| stringify | 92.386 | 115.859 | 10,824 |
+| v5 | 897.700 | 922.660 | 1,114 |
 
 The `Math.random` lanes are steady-state measurements; the one-time warning is
 emitted during warmup and is not part of the measured medians. These values are

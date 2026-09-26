@@ -1,16 +1,17 @@
 {
   "schemaVersion": 1,
   "kind": "esuuid-pack-reproducibility",
-  "capturedAt": "2026-09-26T08:37:51.885Z",
+  "capturedAt": "2026-09-26T19:27:23.381Z",
   "node": "v22.23.2",
   "package": {
     "filename": "esuuid-0.1.0.tgz",
-    "bytes": 88550,
-    "npmShasum": "2fd2d191fb5c70df1d52db38c0894635f14f497e",
-    "npmIntegrity": "sha512-waXpwJH+Cx2oHY+OLwtJgu+DIg37hSVfV8Ut1h0R4CO02LHwgRFO8zXLG1czSgP4Nyb00GdYyrkVpCJvJBU7Tg==",
+    "bytes": 88970,
+    "npmShasum": "7a303297153aac9250bfc9a0c80d6e0c42c8550a",
+    "npmIntegrity": "sha512-SQUa1UjtrSRo2QMRDlXD7QMm3+57yDV8Su9b+N1kyJx01ecZrEJOWpM96i7l+HMolaqJQsey2iXf6GKCn/W15Q==",
     "entryCount": 40
   },
   "install": "npm install --ignore-scripts in clean extracted tarball",
+  "toolingImport": "tooling/comtool-v2.mjs imports from declared pinned ESTC dependency",
   "verification": "npm run verify",
   "byteIdentical": true,
   "artifacts": [
