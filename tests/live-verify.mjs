@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   PROJECT_ROOT,
-  acquireLease,
+  acquireLeaseWithRetry,
   assertExtendScriptArtifactSafe,
   discoverIllustratorTarget,
   parseCommonOptions,
@@ -16,18 +16,21 @@ import {
 var config = parseCommonOptions(process.argv.slice(2));
 var EXPECTED_LIVE_CHECKS = 48;
 var probe = join(PROJECT_ROOT, 'tests', 'esuuid-live-probe.jsx');
+var esuuidReadable = join(PROJECT_ROOT, 'dist', 'ESUUID.jsx');
+var esuuidMinified = join(PROJECT_ROOT, 'dist', 'ESUUID.min.jsx');
+var esrandVendor = process.env.ESUUID_ESRAND_VENDOR ||
+  join(PROJECT_ROOT, '..', 'esrand', 'dist', 'vendor-esrand.js');
 if (!existsSync(probe)) throw new Error('Live probe not found: ' + probe);
 assertExtendScriptArtifactSafe(
-  join(PROJECT_ROOT, 'dist', 'ESUUID.jsx'),
+  esuuidReadable,
   'ESUUID readable artifact'
 );
 assertExtendScriptArtifactSafe(
-  join(PROJECT_ROOT, 'dist', 'ESUUID.min.jsx'),
+  esuuidMinified,
   'ESUUID minified artifact'
 );
 assertExtendScriptArtifactSafe(
-  process.env.ESUUID_ESRAND_VENDOR ||
-    join(PROJECT_ROOT, '..', 'esrand', 'dist', 'vendor-esrand.js'),
+  esrandVendor,
   'ESRAND vendor artifact'
 );
 
@@ -39,7 +42,7 @@ var hash = sha256File(probe);
 var requestId = 'esuuid-live-' + hash.slice(0, 16) + '-' + Date.now().toString(36);
 
 try {
-  leaseId = acquireLease(config, targetId, 180000);
+  leaseId = acquireLeaseWithRetry(config, targetId, 180000);
   envelope = runFile(config, {
     leaseId: leaseId,
     requestId: requestId,
@@ -83,6 +86,11 @@ var evidence = {
   },
   requestId: requestId,
   probeSha256: hash,
+  artifacts: {
+    esuuidReadableSha256: sha256File(esuuidReadable),
+    esuuidMinifiedSha256: sha256File(esuuidMinified),
+    esrandVendorSha256: sha256File(esrandVendor)
+  },
   checks: checks,
   illustrator: match[2],
   extendScript: match[3],

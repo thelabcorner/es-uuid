@@ -13,11 +13,12 @@
     "fuzz": "node tests/fuzz.mjs",
     "benchmark": "node tests/benchmark.mjs",
     "live-benchmark": "node bench/run-live-bench.mjs",
+    "evidence:check": "node tooling/check-evidence.mjs",
     "verify:portable": "npm run typecheck && npm run build:node && npm test && npm run differential && npm run fuzz",
     "verify": "npm run typecheck && npm run build && npm test && npm run differential && npm run fuzz",
     "prelive-verify": "npm run build",
     "live-verify": "node tests/live-verify.mjs",
-    "release:gate": "npm run verify && node tests/live-verify.mjs",
+    "release:gate": "npm run verify && node tests/live-verify.mjs && npm run evidence:check",
     "prepublishOnly": "npm run verify"
   },
   "files": [
@@ -39,6 +40,7 @@
     "bench/live-bench.jsx",
     "bench/run-live-bench.mjs",
     "tooling/comtool-v2.mjs",
+    "tooling/check-evidence.mjs",
     "tooling/minifier/conservative.json",
     "tooling/minifier/extendscript_preprocess.py",
     "tooling/minifier/minify-jsx.py",

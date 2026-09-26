@@ -90,12 +90,19 @@ export function parseCommonOptions(argv) {
   var out = {
     cli: process.env.COMTOOL_V2_CLI || DEFAULT_CLI,
     pipe: process.env.COMTOOL_V2_PIPE || 'comtool-v2-runtime-1',
-    target: process.env.COMTOOL_V2_TARGET || null
+    target: process.env.COMTOOL_V2_TARGET || null,
+    leaseWaitMs: process.env.COMTOOL_V2_LEASE_WAIT_MS
+      ? Number(process.env.COMTOOL_V2_LEASE_WAIT_MS)
+      : 60000
   };
   for (var i = 0; i < argv.length; i++) {
     if (argv[i] === '--cli' && i + 1 < argv.length) out.cli = resolve(argv[++i]);
     else if (argv[i] === '--pipe' && i + 1 < argv.length) out.pipe = argv[++i];
     else if (argv[i] === '--target' && i + 1 < argv.length) out.target = argv[++i];
+    else if (argv[i] === '--lease-wait-ms' && i + 1 < argv.length) out.leaseWaitMs = Number(argv[++i]);
+  }
+  if (!Number.isFinite(out.leaseWaitMs) || out.leaseWaitMs < 0) {
+    throw new Error('--lease-wait-ms / COMTOOL_V2_LEASE_WAIT_MS must be a non-negative number');
   }
   return out;
 }
@@ -140,6 +147,40 @@ export function acquireLease(config, targetId, ttlMs = 180000) {
   var value = resultValue(envelope);
   if (!value || !value.leaseId) throw new Error('COM Tool V2 lease response omitted leaseId');
   return value.leaseId;
+}
+
+function sleepSync(ms) {
+  if (!(ms > 0)) return;
+  var cell = new Int32Array(new SharedArrayBuffer(4));
+  Atomics.wait(cell, 0, 0, ms);
+}
+
+export function acquireLeaseWithRetry(config, targetId, ttlMs = 180000) {
+  var waitMs = config.leaseWaitMs === undefined ? 60000 : config.leaseWaitMs;
+  var deadline = Date.now() + waitMs;
+  var announced = false;
+  while (true) {
+    try {
+      return acquireLease(config, targetId, ttlMs);
+    } catch (error) {
+      var envelope = error && error.envelope ? error.envelope : null;
+      var runtimeError = envelope && envelope.error ? envelope.error : null;
+      if (!runtimeError ||
+          runtimeError.kind !== 'target_leased_external' ||
+          runtimeError.retryable !== true ||
+          Date.now() >= deadline) {
+        throw error;
+      }
+      if (!announced) {
+        console.error(
+          '[comtool-v2] target is leased by another runtime; waiting up to ' +
+          waitMs + ' ms without stealing ownership'
+        );
+        announced = true;
+      }
+      sleepSync(Math.min(1000, Math.max(1, deadline - Date.now())));
+    }
+  }
 }
 
 export function releaseLease(config, targetId, leaseId) {

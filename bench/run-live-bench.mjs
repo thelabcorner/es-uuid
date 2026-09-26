@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import {
   PROJECT_ROOT,
   SCRIPTS_ROOT,
-  acquireLease,
+  acquireLeaseWithRetry,
   assertExtendScriptArtifactSafe,
   discoverIllustratorTarget,
   parseCommonOptions,
@@ -69,7 +69,7 @@ function parseResult(text) {
 }
 
 try {
-  leaseId = acquireLease(config, targetId, 300000);
+  leaseId = acquireLeaseWithRetry(config, targetId, 300000);
   for (li = 0; li < lanes.length; li++) {
     var lane = lanes[li];
     for (var round = 0; round < rounds; round++) {
@@ -150,6 +150,11 @@ var evidence = {
     adapterVersion: targetEntry.identity && targetEntry.identity.adapterVersion
   },
   probeSha256: probeHash,
+  artifacts: {
+    estimerVendorSha256: sha256File(estimer),
+    esrandVendorSha256: sha256File(esrand),
+    esuuidVendorSha256: sha256File(esuuid)
+  },
   rounds: rounds,
   summary: summary,
   raw: rows
