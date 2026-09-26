@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "standard": "RFC 9562",
   "compatibilityOracle": "uuid@14.0.2",
-  "generatedAt": "2026-09-26T08:32:57.074Z",
+  "generatedAt": "2026-09-26T08:37:54.148Z",
   "node": "v22.23.2",
-  "sourceTreeSha256": "a0143aca8f81743b8ea8f810299c193541811c8429acf61df252aead47f72812",
+  "sourceTreeSha256": "94785b0cad1df6af15b8094574939047a9baa1c98c9fe3a2794d70d850680452",
   "sourceFileCount": 38,
   "toolchain": {
     "esbuild": "0.28.2",
@@ -55,8 +55,8 @@
   "evidence": [
     {
       "file": "evidence/latest-live-verify.json",
-      "bytes": 1093,
-      "sha256": "8c17583fd599c858e79c15537bf22a15c2d4d6387d9ed9232636357b0b306d7a"
+      "bytes": 1095,
+      "sha256": "3fae624e83b21f51141f89a9495b7767ca6070a43596ca9c58c5bd23b8fca616"
     },
     {
       "file": "evidence/latest-live-benchmark.json",
@@ -66,7 +66,7 @@
     {
       "file": "evidence/latest-pack-reproducibility.json",
       "bytes": 1347,
-      "sha256": "0e63be73fb09ccb94d187d72e5c90d30a9ece12828780179b7a996689cb62bda"
+      "sha256": "322ee9e7c45734f31d5511a746c029a2ff18030f2904df08ed1450cbd817f1e4"
     }
   ]
 }

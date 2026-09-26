@@ -51,6 +51,14 @@ var packPath = join(ROOT, 'evidence', 'latest-pack-reproducibility.json');
 var live = readJson(livePath);
 var bench = readJson(benchPath);
 var pack = readJson(packPath);
+var pkg = readJson(join(ROOT, 'package.json'));
+
+if (
+  Array.isArray(pkg.files) &&
+  pkg.files.indexOf('evidence/latest-pack-reproducibility.json') !== -1
+) {
+  fail('pack reproducibility evidence must not be included in the npm package payload');
+}
 
 assertEqual('live check count', live.checks, EXPECTED_LIVE_CHECKS);
 assertEqual('live result', live.result,

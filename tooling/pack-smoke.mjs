@@ -147,9 +147,30 @@ writeFileSync(
   join(evidenceDir, 'latest-pack-reproducibility.json'),
   JSON.stringify(evidence, null, 2) + '\n'
 );
+
+// Prove that writing the pack evidence itself cannot perturb the package
+// payload. This specifically guards against accidentally adding
+// latest-pack-reproducibility.json to package.json#files and creating a
+// self-referential tarball hash.
+var repackInfo = JSON.parse(
+  captureNpm(['pack', '--ignore-scripts', '--pack-destination', TMP, '--json'], ROOT)
+);
+if (!Array.isArray(repackInfo) || repackInfo.length !== 1) {
+  throw new Error('second npm pack returned an unexpected payload');
+}
+if (
+  repackInfo[0].shasum !== packInfo[0].shasum ||
+  repackInfo[0].integrity !== packInfo[0].integrity
+) {
+  throw new Error(
+    'npm tarball is not stable after writing pack evidence; ' +
+    'exclude generated pack evidence from the package payload'
+  );
+}
 rmSync(TMP, { recursive: true, force: true });
 
 console.log(
   '[pack:smoke] PASS: clean tarball install + full verify + ' +
-  artifacts.length + '/' + artifacts.length + ' byte-identical rebuilt artifacts'
+  artifacts.length + '/' + artifacts.length +
+  ' byte-identical rebuilt artifacts + stable second pack'
 );
