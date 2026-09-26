@@ -400,13 +400,13 @@ Protocol: one benchmark lane per `script.runFile`; ESTIMER prime; 5 warmups; 9 m
 
 | Lane | Median us/op | Min us/op | p95 us/op | Median ops/s |
 |---|---:|---:|---:|---:|
-| v4, ESRAND entropy | 85.188 | 77.176 | 91.884 | 11,739 |
-| v4, explicit bytes | 63.876 | 56.932 | 67.152 | 15,655 |
-| v7, ESRAND entropy | 96.208 | 86.072 | 100.980 | 10,394 |
-| v7, explicit bytes | 75.632 | 72.178 | 80.724 | 13,222 |
-| parse | 201.364 | 193.283 | 208.582 | 4,966 |
-| stringify | 153.241 | 144.676 | 161.213 | 6,526 |
-| v5 | 1,569.160 | 1,483.900 | 1,662.380 | 637 |
+| v4, ESRAND entropy | 81.644 | 73.540 | 93.460 | 12,248 |
+| v4, explicit bytes | 69.464 | 57.964 | 73.958 | 14,396 |
+| v7, ESRAND entropy | 103.372 | 87.268 | 114.540 | 9,674 |
+| v7, explicit bytes | 79.134 | 71.520 | 101.024 | 12,637 |
+| parse | 209.400 | 198.339 | 219.459 | 4,776 |
+| stringify | 160.451 | 150.467 | 175.928 | 6,232 |
+| v5 | 1,684.760 | 1,600.860 | 1,773.940 | 594 |
 
 These are host-engine measurements, not Node throughput estimates. Re-run `npm run live-benchmark` on the target Adobe host before using them as a capacity estimate for a different machine or application.
 

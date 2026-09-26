@@ -64,13 +64,13 @@ Environment and protocol:
 
 | Lane | Median us/op | p95 us/op | Median ops/s |
 |---|---:|---:|---:|
-| v4 + ESRAND | 85.188 | 91.884 | 11,739 |
-| v4 explicit bytes | 63.876 | 67.152 | 15,655 |
-| v7 + ESRAND | 96.208 | 100.980 | 10,394 |
-| v7 explicit bytes/time/sequence | 75.632 | 80.724 | 13,222 |
-| parse | 201.364 | 208.582 | 4,966 |
-| stringify | 153.241 | 161.213 | 6,526 |
-| v5 | 1,569.160 | 1,662.380 | 637 |
+| v4 + ESRAND | 81.644 | 93.460 | 12,248 |
+| v4 explicit bytes | 69.464 | 73.958 | 14,396 |
+| v7 + ESRAND | 103.372 | 114.540 | 9,674 |
+| v7 explicit bytes/time/sequence | 79.134 | 101.024 | 12,637 |
+| parse | 209.400 | 219.459 | 4,776 |
+| stringify | 160.451 | 175.928 | 6,232 |
+| v5 | 1,684.760 | 1,773.940 | 594 |
 
 These values are specific to the named host/version and benchmark protocol.
 
