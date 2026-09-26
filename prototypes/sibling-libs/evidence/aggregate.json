@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 2,
+  "kind": "esuuid-sibling-microprototype-aggregate",
+  "generatedAt": "2026-09-26T09:20:16.752Z",
+  "environment": {
+    "illustrator": "30.6.0",
+    "extendScript": "4.5.6",
+    "target": {
+      "id": "illustrator:99593b6138869094f479ad24",
+      "hostVersion": "30.6.0",
+      "processId": 94456
+    },
+    "transport": "COM Tool V2 script.runFile; one isolated lane per request",
+    "timer": "ESTIMER"
+  },
+  "mainReplicates": [
+    {
+      "file": "final-a.json",
+      "sha256": "b8b09cb5b39218c2e8ed0bb8d81f579c01a6bf8741445331316aee5fb2924bdb",
+      "capturedAt": "2026-09-26T09:11:47.252Z",
+      "runSession": "67824-mui66xau"
+    },
+    {
+      "file": "final-b.json",
+      "sha256": "84969d45e5e47460991389943e135154acafd8c279d0f6b9b4630753421e6857",
+      "capturedAt": "2026-09-26T09:12:31.676Z",
+      "runSession": "83780-mui67wp9"
+    },
+    {
+      "file": "final-c.json",
+      "sha256": "79ea27921651d4f6c5beb66344f774080d672c77379c0f392398953b958d9306",
+      "capturedAt": "2026-09-26T09:13:36.101Z",
+      "runSession": "59992-mui6950e"
+    }
+  ],
+  "nativeEsstrReplicates": [
+    {
+      "file": "native-a.json",
+      "sha256": "18feaf1795ad739746694cb546348b67fb8318e46c48799627d2e1ca8b7d17b9",
+      "capturedAt": "2026-09-26T09:18:56.503Z",
+      "runSession": "esstr-80728-mui6grhy"
+    },
+    {
+      "file": "native-b.json",
+      "sha256": "03d414d987bddd75d6b2019bcbcb7c7ecd45748004e01d5135a0e1b895177551",
+      "capturedAt": "2026-09-26T09:19:05.762Z",
+      "runSession": "esstr-84540-mui6h0df"
+    },
+    {
+      "file": "native-c.json",
+      "sha256": "7257c18e38c9bc46948e4641eea01389039010bcea7642f9bf9293768fef5bbb",
+      "capturedAt": "2026-09-26T09:19:14.749Z",
+      "runSession": "esstr-81528-mui6h7a7"
+    }
+  ],
+  "correctness": {
+    "checksEach": [
+      16,
+      16,
+      16
+    ],
+    "failuresEach": [
+      0,
+      0,
+      0
+    ],
+    "escharsEmbeddedNulBehaviorEach": [
+      "mismatch",
+      "mismatch",
+      "mismatch"
+    ]
+  },
+  "hashes": {
+    "main": {
+      "runner": "f1b0301f96775f207cf499fe08e06b20bb30c7c18c81b15b379cb596f7d721dc",
+      "probe": "dec1d8f1fb070e86dba68f4a89594e9bd45759fa818f9f0ca261316bef976107",
+      "estcConfig": "674b3cf39ab29dca2e47009390b066dd093ec3f052c07060cff8f62d95e3d2fe",
+      "prototypeBundle": "e8a4b95fec155289f0126eb2646ce72932c9c60c7267ed233038c63771eca9bd",
+      "esuuidVendor": "e217d0c3da1fc087ee00757fb475878277d3f107b1cdc0de46c060f4a44f941b",
+      "estimerVendor": "b723241b512770774367905cdd3d19f0e6287b6cc86bafe2b93038bcfd902aa1",
+      "escharsDll": "0cd4a59eb4b07294339a2094f512e3f0974d39451f6b88023cdff5f50786cdcc",
+      "escharsSource": "bf0ae673a6a4bc5ed131b767144cf3021058ab07140ffeba6ec90edf501948ce",
+      "esstrStringCore": "e3d70044c6fabeca19082e7b74d197a6f6368a1e2a97f39dbe791bd40b7da7be",
+      "esarrArrayCore": "aa863c2e089c564def038a533a24043c31f370e6a1cc8826e7ced77637667957",
+      "esarrEs3": "3ed9f2cc509604722c5b11830e9fa04ce4c27b2acd0238befe47914a073a4e22"
+    },
+    "nativeEsstr": {
+      "runner": "20e78d938598082bc6bacba83596323399cb516e2e25bbb67861c66eb6031cbf",
+      "probe": "defbead4ef1a83466ffb5434e19941efc5cec5fc773279ed3de936378e7824b2",
+      "estcConfig": "674b3cf39ab29dca2e47009390b066dd093ec3f052c07060cff8f62d95e3d2fe",
+      "prototypeBundle": "e8a4b95fec155289f0126eb2646ce72932c9c60c7267ed233038c63771eca9bd",
+      "esstrTrimDll": "de962e409210a82641b7a1eef522a9f48fcde7ea69742e5b6b1e12c1fe6ed5c1",
+      "esstrStringCore": "e3d70044c6fabeca19082e7b74d197a6f6368a1e2a97f39dbe791bd40b7da7be",
+      "esstrNativeLane": "a44d986597655241b733a0736e55c4853e17bbebd4d09bf752dc8bee2b95a210",
+      "esuuidVendor": "e217d0c3da1fc087ee00757fb475878277d3f107b1cdc0de46c060f4a44f941b",
+      "estimerVendor": "b723241b512770774367905cdd3d19f0e6287b6cc86bafe2b93038bcfd902aa1"
+    }
+  },
+  "comparisons": [
+    {
+      "test": "ESCHARS validate / per-char native",
+      "baseline": "validate.baseline",
+      "candidate": "validate.eschars-char",
+      "baselineMedianUsAcrossRuns": 103.18,
+      "candidateMedianUsAcrossRuns": 409,
+      "candidateOverBaselineMedian": 3.91350110037317,
+      "candidateOverBaselineMin": 3.6295793758480324,
+      "candidateOverBaselineMax": 4.481675392670157,
+      "medianSpeedup": 0.25552567237163815,
+      "medianDeltaPercent": 291.350110037317,
+      "ratiosByRun": [
+        3.6295793758480324,
+        4.481675392670157,
+        3.91350110037317
+      ]
+    },
+    {
+      "test": "ESCHARS parse / per-char native",
+      "baseline": "parse.baseline",
+      "candidate": "parse.eschars-char",
+      "baselineMedianUsAcrossRuns": 203.06,
+      "candidateMedianUsAcrossRuns": 778,
+      "candidateOverBaselineMedian": 3.737868742192755,
+      "candidateOverBaselineMin": 3.6934896089825666,
+      "candidateOverBaselineMax": 4.315994265820192,
+      "medianSpeedup": 0.2675321336760925,
+      "medianDeltaPercent": 273.7868742192755,
+      "ratiosByRun": [
+        4.315994265820192,
+        3.737868742192755,
+        3.6934896089825666
+      ]
+    },
+    {
+      "test": "ESCHARS UTF-8 preprocess 1K",
+      "baseline": "utf8.1k-js",
+      "candidate": "utf8.1k-eschars-hex",
+      "baselineMedianUsAcrossRuns": 4521,
+      "candidateMedianUsAcrossRuns": 10552,
+      "candidateOverBaselineMedian": 2.358294451887098,
+      "candidateOverBaselineMin": 2.333996903339969,
+      "candidateOverBaselineMax": 2.3893886865317944,
+      "medianSpeedup": 0.42403525954946125,
+      "medianDeltaPercent": 135.8294451887098,
+      "ratiosByRun": [
+        2.333996903339969,
+        2.358294451887098,
+        2.3893886865317944
+      ]
+    },
+    {
+      "test": "ESCHARS UTF-8 preprocess 4K",
+      "baseline": "utf8.4k-js",
+      "candidate": "utf8.4k-eschars-hex",
+      "baselineMedianUsAcrossRuns": 34307,
+      "candidateMedianUsAcrossRuns": 58871,
+      "candidateOverBaselineMedian": 1.784348195071682,
+      "candidateOverBaselineMin": 1.6064347487555963,
+      "candidateOverBaselineMax": 1.806453493456146,
+      "medianSpeedup": 0.5604287340116526,
+      "medianDeltaPercent": 78.4348195071682,
+      "ratiosByRun": [
+        1.6064347487555963,
+        1.806453493456146,
+        1.784348195071682
+      ]
+    },
+    {
+      "test": "ESCHARS-assisted v5 short",
+      "baseline": "v5.short-baseline",
+      "candidate": "v5.short-eschars-hex",
+      "baselineMedianUsAcrossRuns": 1577.8,
+      "candidateMedianUsAcrossRuns": 1650.2,
+      "candidateOverBaselineMedian": 1.09607512641464,
+      "candidateOverBaselineMin": 0.9863100519710991,
+      "candidateOverBaselineMax": 1.163095573724274,
+      "medianSpeedup": 0.9123462214411248,
+      "medianDeltaPercent": 9.607512641464,
+      "ratiosByRun": [
+        0.9863100519710991,
+        1.163095573724274,
+        1.09607512641464
+      ]
+    },
+    {
+      "test": "ESCHARS-assisted v5 1K",
+      "baseline": "v5.1k-baseline",
+      "candidate": "v5.1k-eschars-hex",
+      "baselineMedianUsAcrossRuns": 44062,
+      "candidateMedianUsAcrossRuns": 57735,
+      "candidateOverBaselineMedian": 1.3088148517997367,
+      "candidateOverBaselineMin": 1.2936945415434256,
+      "candidateOverBaselineMax": 1.4058249319891183,
+      "medianSpeedup": 0.7640500095371864,
+      "medianDeltaPercent": 30.881485179973666,
+      "ratiosByRun": [
+        1.3088148517997367,
+        1.4058249319891183,
+        1.2936945415434256
+      ]
+    },
+    {
+      "test": "ESCHARS-assisted v3 1K",
+      "baseline": "v3.1k-baseline",
+      "candidate": "v3.1k-eschars-hex",
+      "baselineMedianUsAcrossRuns": 35357,
+      "candidateMedianUsAcrossRuns": 49262,
+      "candidateOverBaselineMedian": 1.3992420171394633,
+      "candidateOverBaselineMin": 1.248028091507036,
+      "candidateOverBaselineMax": 1.4223184639815216,
+      "medianSpeedup": 0.7146726497281345,
+      "medianDeltaPercent": 39.92420171394633,
+      "ratiosByRun": [
+        1.3992420171394633,
+        1.248028091507036,
+        1.4223184639815216
+      ]
+    },
+    {
+      "test": "ESSTR trim + validate x64",
+      "baseline": "validate64.baseline",
+      "candidate": "validate64.esstr-trim",
+      "baselineMedianUsAcrossRuns": 6476,
+      "candidateMedianUsAcrossRuns": 8124,
+      "candidateOverBaselineMedian": 1.1386658431130328,
+      "candidateOverBaselineMin": 1.1275503122831367,
+      "candidateOverBaselineMax": 1.3958157583937911,
+      "medianSpeedup": 0.8782207756983997,
+      "medianDeltaPercent": 13.866584311303276,
+      "ratiosByRun": [
+        1.1386658431130328,
+        1.3958157583937911,
+        1.1275503122831367
+      ]
+    },
+    {
+      "test": "ESARR map stringify",
+      "baseline": "stringify.direct",
+      "candidate": "stringify.esarr-map",
+      "baselineMedianUsAcrossRuns": 103.02,
+      "candidateMedianUsAcrossRuns": 128.52,
+      "candidateOverBaselineMedian": 1.3473110388929659,
+      "candidateOverBaselineMin": 0.9815569792273345,
+      "candidateOverBaselineMax": 1.4474678028469061,
+      "medianSpeedup": 0.7422191098661686,
+      "medianDeltaPercent": 34.73110388929659,
+      "ratiosByRun": [
+        0.9815569792273345,
+        1.3473110388929659,
+        1.4474678028469061
+      ]
+    },
+    {
+      "test": "ESARR map copy16",
+      "baseline": "copy16.for",
+      "candidate": "copy16.esarr-map",
+      "baselineMedianUsAcrossRuns": 8.966,
+      "candidateMedianUsAcrossRuns": 25.48,
+      "candidateOverBaselineMedian": 2.841846977470444,
+      "candidateOverBaselineMin": 2.765282583621684,
+      "candidateOverBaselineMax": 3.0200710850930377,
+      "medianSpeedup": 0.351883830455259,
+      "medianDeltaPercent": 184.1846977470444,
+      "ratiosByRun": [
+        2.765282583621684,
+        2.841846977470444,
+        3.0200710850930377
+      ]
+    },
+    {
+      "test": "ESARR slice copy16",
+      "baseline": "copy16.for",
+      "candidate": "copy16.esarr-slice",
+      "baselineMedianUsAcrossRuns": 8.966,
+      "candidateMedianUsAcrossRuns": 18.08,
+      "candidateOverBaselineMedian": 2.0165068034798126,
+      "candidateOverBaselineMin": 1.850303157014426,
+      "candidateOverBaselineMax": 2.8013264129181086,
+      "medianSpeedup": 0.4959070796460177,
+      "medianDeltaPercent": 101.65068034798126,
+      "ratiosByRun": [
+        2.8013264129181086,
+        2.0165068034798126,
+        1.850303157014426
+      ]
+    },
+    {
+      "test": "ESARR forEach emit16",
+      "baseline": "emit16.for",
+      "candidate": "emit16.esarr-foreach",
+      "baselineMedianUsAcrossRuns": 5.384,
+      "candidateMedianUsAcrossRuns": 23.7,
+      "candidateOverBaselineMedian": 4.34656741108354,
+      "candidateOverBaselineMin": 3.8690282742931426,
+      "candidateOverBaselineMax": 4.401931649331352,
+      "medianSpeedup": 0.2300666032350143,
+      "medianDeltaPercent": 334.65674110835397,
+      "ratiosByRun": [
+        4.401931649331352,
+        4.34656741108354,
+        3.8690282742931426
+      ]
+    }
+  ],
+  "esstrNative": {
+    "workload": "64 rotating UUID validate operations per timed sample; ESSTR native minLength forced to 0",
+    "baselineMedianUsAcrossRuns": 6375,
+    "pureMedianUsAcrossRuns": 8146,
+    "nativeMedianUsAcrossRuns": 13092,
+    "pureOverBaselineMedian": 1.2778039215686274,
+    "pureOverBaselineMin": 1.245116874799872,
+    "pureOverBaselineMax": 1.2928426633400905,
+    "nativeOverBaselineMedian": 2.0536470588235294,
+    "nativeOverBaselineMin": 2.027217419148255,
+    "nativeOverBaselineMax": 2.097770154373928,
+    "nativeOverPureMedian": 1.6226028223374744,
+    "nativeOverPureMin": 1.6071691627792781,
+    "nativeOverPureMax": 1.6281342419956282
+  }
+}

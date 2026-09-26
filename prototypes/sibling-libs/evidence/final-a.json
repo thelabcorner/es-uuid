@@ -1,0 +1,634 @@
+{
+  "schemaVersion": 3,
+  "kind": "esuuid-sibling-microprototype",
+  "capturedAt": "2026-09-26T09:11:47.252Z",
+  "runSession": "67824-mui66xau",
+  "transport": "COM Tool V2 script.runFile; one isolated lane per request",
+  "timer": "ESTIMER",
+  "target": {
+    "id": "illustrator:99593b6138869094f479ad24",
+    "hostVersion": "30.6.0",
+    "processId": 94456
+  },
+  "correctness": {
+    "checks": 16,
+    "nulBehavior": "mismatch",
+    "illustrator": "30.6.0",
+    "extendScript": "4.5.6",
+    "requestId": "esuuid-sibling-67824-mui66xau-correctness-dec1d8f1"
+  },
+  "hashes": {
+    "runner": "f1b0301f96775f207cf499fe08e06b20bb30c7c18c81b15b379cb596f7d721dc",
+    "probe": "dec1d8f1fb070e86dba68f4a89594e9bd45759fa818f9f0ca261316bef976107",
+    "estcConfig": "674b3cf39ab29dca2e47009390b066dd093ec3f052c07060cff8f62d95e3d2fe",
+    "prototypeBundle": "e8a4b95fec155289f0126eb2646ce72932c9c60c7267ed233038c63771eca9bd",
+    "esuuidVendor": "e217d0c3da1fc087ee00757fb475878277d3f107b1cdc0de46c060f4a44f941b",
+    "estimerVendor": "b723241b512770774367905cdd3d19f0e6287b6cc86bafe2b93038bcfd902aa1",
+    "escharsDll": "0cd4a59eb4b07294339a2094f512e3f0974d39451f6b88023cdff5f50786cdcc",
+    "escharsSource": "bf0ae673a6a4bc5ed131b767144cf3021058ab07140ffeba6ec90edf501948ce",
+    "esstrStringCore": "e3d70044c6fabeca19082e7b74d197a6f6368a1e2a97f39dbe791bd40b7da7be",
+    "esarrArrayCore": "aa863c2e089c564def038a533a24043c31f370e6a1cc8826e7ced77637667957",
+    "esarrEs3": "3ed9f2cc509604722c5b11830e9fa04ce4c27b2acd0238befe47914a073a4e22"
+  },
+  "rows": [
+    {
+      "lane": "validate.baseline",
+      "batch": 100,
+      "medianBatchUs": 10318,
+      "minBatchUs": 8856,
+      "p95BatchUs": 10839,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 103.18,
+      "minUsPerOp": 88.56,
+      "p95UsPerOp": 108.39,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-validate-baseline-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0002,
+        "executeMs": 284.5838,
+        "verifyMs": 0,
+        "totalMs": 296.4979
+      }
+    },
+    {
+      "lane": "validate.eschars-char",
+      "batch": 2,
+      "medianBatchUs": 749,
+      "minBatchUs": 608,
+      "p95BatchUs": 886,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 374.5,
+      "minUsPerOp": 304,
+      "p95UsPerOp": 443,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-validate-eschars-char-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0008,
+        "executeMs": 157.2856,
+        "verifyMs": 0,
+        "totalMs": 168.9757
+      }
+    },
+    {
+      "lane": "parse.baseline",
+      "batch": 50,
+      "medianBatchUs": 9766,
+      "minBatchUs": 9366,
+      "p95BatchUs": 11769,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 195.32,
+      "minUsPerOp": 187.32,
+      "p95UsPerOp": 235.38,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-parse-baseline-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0007,
+        "executeMs": 188.0506,
+        "verifyMs": 0,
+        "totalMs": 203.6567
+      }
+    },
+    {
+      "lane": "parse.eschars-char",
+      "batch": 1,
+      "medianBatchUs": 843,
+      "minBatchUs": 576,
+      "p95BatchUs": 918,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 843,
+      "minUsPerOp": 576,
+      "p95UsPerOp": 918,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-parse-eschars-char-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0006,
+        "executeMs": 147.0998,
+        "verifyMs": 0,
+        "totalMs": 159.3898
+      }
+    },
+    {
+      "lane": "utf8.1k-js",
+      "batch": 5,
+      "medianBatchUs": 22605,
+      "minBatchUs": 20906,
+      "p95BatchUs": 24751,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 4521,
+      "minUsPerOp": 4181.2,
+      "p95UsPerOp": 4950.2,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-utf8-1k-js-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0007,
+        "executeMs": 471.252,
+        "verifyMs": 0,
+        "totalMs": 485.9034
+      }
+    },
+    {
+      "lane": "utf8.1k-eschars-hex",
+      "batch": 5,
+      "medianBatchUs": 52760,
+      "minBatchUs": 50685,
+      "p95BatchUs": 54448,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 10552,
+      "minUsPerOp": 10137,
+      "p95UsPerOp": 10889.6,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-utf8-1k-eschars-hex-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0012,
+        "executeMs": 790.2903,
+        "verifyMs": 0,
+        "totalMs": 807.6094
+      }
+    },
+    {
+      "lane": "utf8.4k-js",
+      "batch": 1,
+      "medianBatchUs": 35961,
+      "minBatchUs": 31825,
+      "p95BatchUs": 40048,
+      "sampleCount": 7,
+      "rejected": 0,
+      "medianUsPerOp": 35961,
+      "minUsPerOp": 31825,
+      "p95UsPerOp": 40048,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-utf8-4k-js-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0008,
+        "executeMs": 489.6606,
+        "verifyMs": 0,
+        "totalMs": 515.7159
+      }
+    },
+    {
+      "lane": "utf8.4k-eschars-hex",
+      "batch": 1,
+      "medianBatchUs": 57769,
+      "minBatchUs": 54568,
+      "p95BatchUs": 60852,
+      "sampleCount": 7,
+      "rejected": 0,
+      "medianUsPerOp": 57769,
+      "minUsPerOp": 54568,
+      "p95UsPerOp": 60852,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-utf8-4k-eschars-hex-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0005,
+        "executeMs": 727.3807,
+        "verifyMs": 0,
+        "totalMs": 742.3724
+      }
+    },
+    {
+      "lane": "v5.short-baseline",
+      "batch": 5,
+      "medianBatchUs": 7889,
+      "minBatchUs": 7131,
+      "p95BatchUs": 8406,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 1577.8,
+      "minUsPerOp": 1426.2,
+      "p95UsPerOp": 1681.2,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-v5-short-baseline-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0013,
+        "executeMs": 257.1704,
+        "verifyMs": 0,
+        "totalMs": 277.1458
+      }
+    },
+    {
+      "lane": "v5.short-eschars-hex",
+      "batch": 5,
+      "medianBatchUs": 7781,
+      "minBatchUs": 6014,
+      "p95BatchUs": 9209,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 1556.2,
+      "minUsPerOp": 1202.8,
+      "p95UsPerOp": 1841.8,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-v5-short-eschars-hex-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0003,
+        "executeMs": 158.8328,
+        "verifyMs": 0,
+        "totalMs": 171.473
+      }
+    },
+    {
+      "lane": "v5.1k-baseline",
+      "batch": 1,
+      "medianBatchUs": 44062,
+      "minBatchUs": 42523,
+      "p95BatchUs": 45132,
+      "sampleCount": 5,
+      "rejected": 0,
+      "medianUsPerOp": 44062,
+      "minUsPerOp": 42523,
+      "p95UsPerOp": 45132,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-v5-1k-baseline-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0003,
+        "executeMs": 376.3946,
+        "verifyMs": 0,
+        "totalMs": 390.8217
+      }
+    },
+    {
+      "lane": "v5.1k-eschars-hex",
+      "batch": 1,
+      "medianBatchUs": 57669,
+      "minBatchUs": 53413,
+      "p95BatchUs": 63001,
+      "sampleCount": 5,
+      "rejected": 0,
+      "medianUsPerOp": 57669,
+      "minUsPerOp": 53413,
+      "p95UsPerOp": 63001,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-v5-1k-eschars-hex-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0005,
+        "executeMs": 553.7316,
+        "verifyMs": 0,
+        "totalMs": 567.7546
+      }
+    },
+    {
+      "lane": "v3.1k-baseline",
+      "batch": 1,
+      "medianBatchUs": 35357,
+      "minBatchUs": 34083,
+      "p95BatchUs": 37111,
+      "sampleCount": 5,
+      "rejected": 0,
+      "medianUsPerOp": 35357,
+      "minUsPerOp": 34083,
+      "p95UsPerOp": 37111,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-v3-1k-baseline-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0007,
+        "executeMs": 298.9241,
+        "verifyMs": 0,
+        "totalMs": 313.7556
+      }
+    },
+    {
+      "lane": "v3.1k-eschars-hex",
+      "batch": 1,
+      "medianBatchUs": 49473,
+      "minBatchUs": 47109,
+      "p95BatchUs": 55269,
+      "sampleCount": 5,
+      "rejected": 0,
+      "medianUsPerOp": 49473,
+      "minUsPerOp": 47109,
+      "p95UsPerOp": 55269,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-v3-1k-eschars-hex-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0012,
+        "executeMs": 497.4198,
+        "verifyMs": 0,
+        "totalMs": 512.0083
+      }
+    },
+    {
+      "lane": "validate64.baseline",
+      "batch": 1,
+      "medianBatchUs": 6476,
+      "minBatchUs": 5956,
+      "p95BatchUs": 7070,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 6476,
+      "minUsPerOp": 5956,
+      "p95UsPerOp": 7070,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-validate64-baseline-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0006,
+        "executeMs": 270.4722,
+        "verifyMs": 0,
+        "totalMs": 283.7208
+      }
+    },
+    {
+      "lane": "validate64.esstr-trim",
+      "batch": 1,
+      "medianBatchUs": 7374,
+      "minBatchUs": 6880,
+      "p95BatchUs": 8359,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 7374,
+      "minUsPerOp": 6880,
+      "p95UsPerOp": 8359,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-validate64-esstr-trim-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0006,
+        "executeMs": 176.1855,
+        "verifyMs": 0,
+        "totalMs": 191.5672
+      }
+    },
+    {
+      "lane": "stringify.direct",
+      "batch": 100,
+      "medianBatchUs": 10302,
+      "minBatchUs": 8756,
+      "p95BatchUs": 11674,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 103.02,
+      "minUsPerOp": 87.56,
+      "p95UsPerOp": 116.74,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-stringify-direct-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0013,
+        "executeMs": 286.7117,
+        "verifyMs": 0,
+        "totalMs": 304.6655
+      }
+    },
+    {
+      "lane": "stringify.esarr-map",
+      "batch": 25,
+      "medianBatchUs": 2528,
+      "minBatchUs": 1890,
+      "p95BatchUs": 3131,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 101.12,
+      "minUsPerOp": 75.6,
+      "p95UsPerOp": 125.24,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-stringify-esarr-map-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0006,
+        "executeMs": 107.8298,
+        "verifyMs": 0,
+        "totalMs": 118.0715
+      }
+    },
+    {
+      "lane": "copy16.for",
+      "batch": 500,
+      "medianBatchUs": 3468,
+      "minBatchUs": 2657,
+      "p95BatchUs": 4043,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 6.936,
+      "minUsPerOp": 5.314,
+      "p95UsPerOp": 8.086,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-copy16-for-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0012,
+        "executeMs": 187.6331,
+        "verifyMs": 0,
+        "totalMs": 204.3759
+      }
+    },
+    {
+      "lane": "copy16.esarr-map",
+      "batch": 100,
+      "medianBatchUs": 1918,
+      "minBatchUs": 1536,
+      "p95BatchUs": 2579,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 19.18,
+      "minUsPerOp": 15.36,
+      "p95UsPerOp": 25.79,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-copy16-esarr-map-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0007,
+        "executeMs": 171.7479,
+        "verifyMs": 0,
+        "totalMs": 189.5034
+      }
+    },
+    {
+      "lane": "copy16.esarr-slice",
+      "batch": 100,
+      "medianBatchUs": 1943,
+      "minBatchUs": 1704,
+      "p95BatchUs": 2430,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 19.43,
+      "minUsPerOp": 17.04,
+      "p95UsPerOp": 24.3,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-copy16-esarr-slice-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0007,
+        "executeMs": 173.6899,
+        "verifyMs": 0,
+        "totalMs": 187.7573
+      }
+    },
+    {
+      "lane": "emit16.for",
+      "batch": 500,
+      "medianBatchUs": 2692,
+      "minBatchUs": 1712,
+      "p95BatchUs": 3151,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 5.384,
+      "minUsPerOp": 3.424,
+      "p95UsPerOp": 6.302,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-emit16-for-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0003,
+        "executeMs": 88.3192,
+        "verifyMs": 0,
+        "totalMs": 100.5905
+      }
+    },
+    {
+      "lane": "emit16.esarr-foreach",
+      "batch": 100,
+      "medianBatchUs": 2370,
+      "minBatchUs": 1882,
+      "p95BatchUs": 2607,
+      "sampleCount": 9,
+      "rejected": 0,
+      "medianUsPerOp": 23.7,
+      "minUsPerOp": 18.82,
+      "p95UsPerOp": 26.07,
+      "illustrator": "30.6.0",
+      "extendScript": "4.5.6",
+      "requestId": "esuuid-sibling-67824-mui66xau-emit16-esarr-foreach-dec1d8f1",
+      "timing": {
+        "queueMs": 0.0005,
+        "executeMs": 184.2206,
+        "verifyMs": 0,
+        "totalMs": 194.8976
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "test": "ESCHARS validate / per-char native",
+      "baseline": "validate.baseline",
+      "candidate": "validate.eschars-char",
+      "baselineMedianUs": 103.18,
+      "candidateMedianUs": 374.5,
+      "candidateOverBaseline": 3.6295793758480324,
+      "speedup": 0.2755140186915888
+    },
+    {
+      "test": "ESCHARS parse / per-char native",
+      "baseline": "parse.baseline",
+      "candidate": "parse.eschars-char",
+      "baselineMedianUs": 195.32,
+      "candidateMedianUs": 843,
+      "candidateOverBaseline": 4.315994265820192,
+      "speedup": 0.23169632265717674
+    },
+    {
+      "test": "ESCHARS UTF-8 preprocess 1K",
+      "baseline": "utf8.1k-js",
+      "candidate": "utf8.1k-eschars-hex",
+      "baselineMedianUs": 4521,
+      "candidateMedianUs": 10552,
+      "candidateOverBaseline": 2.333996903339969,
+      "speedup": 0.42844958301743746
+    },
+    {
+      "test": "ESCHARS UTF-8 preprocess 4K",
+      "baseline": "utf8.4k-js",
+      "candidate": "utf8.4k-eschars-hex",
+      "baselineMedianUs": 35961,
+      "candidateMedianUs": 57769,
+      "candidateOverBaseline": 1.6064347487555963,
+      "speedup": 0.6224964946597656
+    },
+    {
+      "test": "ESCHARS-assisted v5 short",
+      "baseline": "v5.short-baseline",
+      "candidate": "v5.short-eschars-hex",
+      "baselineMedianUs": 1577.8,
+      "candidateMedianUs": 1556.2,
+      "candidateOverBaseline": 0.9863100519710991,
+      "speedup": 1.013879964014908
+    },
+    {
+      "test": "ESCHARS-assisted v5 1K",
+      "baseline": "v5.1k-baseline",
+      "candidate": "v5.1k-eschars-hex",
+      "baselineMedianUs": 44062,
+      "candidateMedianUs": 57669,
+      "candidateOverBaseline": 1.3088148517997367,
+      "speedup": 0.7640500095371864
+    },
+    {
+      "test": "ESCHARS-assisted v3 1K",
+      "baseline": "v3.1k-baseline",
+      "candidate": "v3.1k-eschars-hex",
+      "baselineMedianUs": 35357,
+      "candidateMedianUs": 49473,
+      "candidateOverBaseline": 1.3992420171394633,
+      "speedup": 0.7146726497281345
+    },
+    {
+      "test": "ESSTR trim + validate x64",
+      "baseline": "validate64.baseline",
+      "candidate": "validate64.esstr-trim",
+      "baselineMedianUs": 6476,
+      "candidateMedianUs": 7374,
+      "candidateOverBaseline": 1.1386658431130328,
+      "speedup": 0.8782207756983997
+    },
+    {
+      "test": "ESARR map stringify",
+      "baseline": "stringify.direct",
+      "candidate": "stringify.esarr-map",
+      "baselineMedianUs": 103.02,
+      "candidateMedianUs": 101.12,
+      "candidateOverBaseline": 0.9815569792273345,
+      "speedup": 1.0187895569620253
+    },
+    {
+      "test": "ESARR map copy16",
+      "baseline": "copy16.for",
+      "candidate": "copy16.esarr-map",
+      "baselineMedianUs": 6.936,
+      "candidateMedianUs": 19.18,
+      "candidateOverBaseline": 2.765282583621684,
+      "speedup": 0.3616266944734098
+    },
+    {
+      "test": "ESARR slice copy16",
+      "baseline": "copy16.for",
+      "candidate": "copy16.esarr-slice",
+      "baselineMedianUs": 6.936,
+      "candidateMedianUs": 19.43,
+      "candidateOverBaseline": 2.8013264129181086,
+      "speedup": 0.35697375193000513
+    },
+    {
+      "test": "ESARR forEach emit16",
+      "baseline": "emit16.for",
+      "candidate": "emit16.esarr-foreach",
+      "baselineMedianUs": 5.384,
+      "candidateMedianUs": 23.7,
+      "candidateOverBaseline": 4.401931649331352,
+      "speedup": 0.22717299578059075
+    }
+  ],
+  "failures": [],
+  "priorRunObservation": {
+    "monolithicProbeWatchdog": true,
+    "illustratorRunawayObserved": true,
+    "note": "A prior monolithic prototype containing repeated long-name v5 work exceeded the V2 60-second worker watchdog and left Illustrator compute-bound. The host was terminated and relaunched; this run isolates every lane."
+  }
+}

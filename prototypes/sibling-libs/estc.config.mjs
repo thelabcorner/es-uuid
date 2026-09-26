@@ -1,0 +1,22 @@
+export default {
+  host: 'illustrator',
+  hostTypes: 'Illustrator/2022',
+  entry: 'src/entry.ts',
+  outfile: 'dist/sibling-prototype.jsx',
+  globalName: '__ESUUID_SIBLING_PROTO_ENTRY__',
+  target: 'illustrator',
+  requireTarget: false,
+  sourceLint: true,
+  typecheck: false,
+  normalize: true,
+  compatibilityTransforms: ['esbuild'],
+  compatibilityShims: [],
+  allowedMissingBuiltins: [],
+  allowedGlobalPatches: [],
+  prelude: [],
+  footer: [],
+  allowJson: false,
+  allowIncludes: false,
+  live: false,
+  liveLaunch: false
+};

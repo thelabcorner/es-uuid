@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "kind": "esuuid-esstr-native-microprototype",
+  "capturedAt": "2026-09-26T09:18:56.503Z",
+  "runSession": "esstr-80728-mui6grhy",
+  "transport": "COM Tool V2 script.runFile",
+  "target": {
+    "id": "illustrator:99593b6138869094f479ad24",
+    "hostVersion": "30.6.0",
+    "processId": 94456
+  },
+  "hashes": {
+    "runner": "20e78d938598082bc6bacba83596323399cb516e2e25bbb67861c66eb6031cbf",
+    "probe": "defbead4ef1a83466ffb5434e19941efc5cec5fc773279ed3de936378e7824b2",
+    "estcConfig": "674b3cf39ab29dca2e47009390b066dd093ec3f052c07060cff8f62d95e3d2fe",
+    "prototypeBundle": "e8a4b95fec155289f0126eb2646ce72932c9c60c7267ed233038c63771eca9bd",
+    "esstrTrimDll": "de962e409210a82641b7a1eef522a9f48fcde7ea69742e5b6b1e12c1fe6ed5c1",
+    "esstrStringCore": "e3d70044c6fabeca19082e7b74d197a6f6368a1e2a97f39dbe791bd40b7da7be",
+    "esstrNativeLane": "a44d986597655241b733a0736e55c4853e17bbebd4d09bf752dc8bee2b95a210",
+    "esuuidVendor": "e217d0c3da1fc087ee00757fb475878277d3f107b1cdc0de46c060f4a44f941b",
+    "estimerVendor": "b723241b512770774367905cdd3d19f0e6287b6cc86bafe2b93038bcfd902aa1"
+  },
+  "workload": "64 rotating UUID validate operations per timed sample; ESSTR native minLength forced to 0",
+  "baseline": {
+    "medianUs": 6246,
+    "minUs": 6018,
+    "p95Us": 6557,
+    "count": 9,
+    "rejected": 0
+  },
+  "pure": {
+    "medianUs": 7777,
+    "minUs": 6722,
+    "p95Us": 8287,
+    "count": 9,
+    "rejected": 0
+  },
+  "native": {
+    "medianUs": 12662,
+    "minUs": 10950,
+    "p95Us": 13886,
+    "count": 9,
+    "rejected": 0
+  },
+  "pureOverBaseline": 1.245116874799872,
+  "nativeOverBaseline": 2.027217419148255,
+  "nativeOverPure": 1.6281342419956282,
+  "illustrator": "30.6.0",
+  "extendScript": "4.5.6"
+}
