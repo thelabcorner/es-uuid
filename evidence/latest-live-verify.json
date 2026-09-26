@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "esuuid-live-verify",
-  "capturedAt": "2026-09-26T08:04:54.534Z",
+  "capturedAt": "2026-09-26T08:17:32.118Z",
   "transport": "COM Tool V2 script.runFile",
   "pipe": "esuuid-v2-final",
   "target": {
@@ -11,7 +11,7 @@
     "hostVersion": "30.6.0",
     "adapterVersion": "0.1.0-dev"
   },
-  "requestId": "esuuid-live-73bc149f6fb429f2-mui3tmpf",
+  "requestId": "esuuid-live-73bc149f6fb429f2-mui49vrb",
   "probeSha256": "73bc149f6fb429f22bafb0bdcffc8e5e07f1d548d8e3c83b0b29d6e04e3ed2ad",
   "artifacts": {
     "esuuidReadableSha256": "db2a20c67b1eeca8723a04e7f93596c29f766868532efcd6c45788d52f0c091d",
@@ -23,10 +23,10 @@
   "extendScript": "4.5.6",
   "result": "ESUUID_LIVE_PASS|48|Illustrator=30.6.0|ExtendScript=4.5.6",
   "timing": {
-    "queueMs": 0.0009,
-    "executeMs": 146.1064,
+    "queueMs": 0.0013,
+    "executeMs": 178.2117,
     "verifyMs": 0,
-    "totalMs": 171.1488
+    "totalMs": 194.9937
   },
   "targetState": "known_changed"
 }

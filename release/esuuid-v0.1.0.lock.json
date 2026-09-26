@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "project": "ESUUID",
+  "version": "0.1.0",
+  "standard": "RFC 9562",
+  "compatibilityOracle": "uuid@14.0.2",
+  "generatedAt": "2026-09-26T08:18:04.607Z",
+  "node": "v22.23.2",
+  "sourceTreeSha256": "afab074c22b5dc8fce23641ea0740421205ad9a36bdfd4a8db87697990317a6e",
+  "sourceFileCount": 38,
+  "toolchain": {
+    "esbuild": "0.28.2",
+    "extendscriptToolchain": "https://codeload.github.com/thelabcorner/estc/tar.gz/b2270f5b58326b5b1ae13ba3263faf151c31e689",
+    "typescript": "5.9.3",
+    "uglifyJs": "3.19.3",
+    "uuidOracle": "14.0.2"
+  },
+  "validation": {
+    "unitChecks": 55,
+    "differentialChecks": 3225,
+    "fuzzChecks": 75000,
+    "liveChecks": 48,
+    "liveIllustrator": "30.6.0",
+    "liveExtendScript": "4.5.6",
+    "benchmarkLanes": 7,
+    "packByteIdentical": true
+  },
+  "artifacts": [
+    {
+      "file": "dist/ESUUID.jsx",
+      "bytes": 17927,
+      "sha256": "db2a20c67b1eeca8723a04e7f93596c29f766868532efcd6c45788d52f0c091d"
+    },
+    {
+      "file": "dist/ESUUID.min.jsx",
+      "bytes": 13977,
+      "sha256": "34d0f7121ccc12ff536a8b38cfd75c265ba8a9e05ac332616bb4da72945c654e"
+    },
+    {
+      "file": "dist/vendor-esuuid.js",
+      "bytes": 17927,
+      "sha256": "db2a20c67b1eeca8723a04e7f93596c29f766868532efcd6c45788d52f0c091d"
+    },
+    {
+      "file": "dist/vendor-esuuid.min.js",
+      "bytes": 13977,
+      "sha256": "34d0f7121ccc12ff536a8b38cfd75c265ba8a9e05ac332616bb4da72945c654e"
+    },
+    {
+      "file": "dist/esuuid-core.esm.mjs",
+      "bytes": 20426,
+      "sha256": "1b372722d0cf7bbb92fc33c41fb51f3d903221d2ca5a28422bf4d835f6fb192d"
+    }
+  ],
+  "evidence": [
+    {
+      "file": "evidence/latest-live-verify.json",
+      "bytes": 1095,
+      "sha256": "afe3d555f8e24f6981bd23c70231bf2ef71edb109348c4d3d29c7aff0f9df2a9"
+    },
+    {
+      "file": "evidence/latest-live-benchmark.json",
+      "bytes": 15247,
+      "sha256": "b06ceffc08d4e28a90eb2c9c61cc852e20acda41b730b268e18827815bc9c242"
+    },
+    {
+      "file": "evidence/latest-pack-reproducibility.json",
+      "bytes": 1347,
+      "sha256": "e983bf2c1b93630539999ce2de270cfca5debd195b29767a917d2cfc76a50ab8"
+    }
+  ]
+}

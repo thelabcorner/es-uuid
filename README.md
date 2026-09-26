@@ -493,6 +493,8 @@ npm test
 npm run differential
 npm run fuzz
 npm run benchmark
+npm run pack:smoke
+npm run evidence:check
 ```
 
 Maintainer live gates require a running COM Tool V2 runtime with an Illustrator target:
@@ -500,10 +502,14 @@ Maintainer live gates require a running COM Tool V2 runtime with an Illustrator 
 ```bash
 npm run live-verify -- --pipe <runtime-pipe>
 npm run live-benchmark -- --pipe <runtime-pipe> --rounds 3
-npm run release:gate
+npm run release:gate -- --pipe <runtime-pipe> --target <target-id>
 ```
 
-`npm run build` uses the pinned public ESTC dependency installed by `npm ci` by default. Set `ESUUID_USE_WORKSPACE_ESTC=1` to opt into the sibling toolkit ESTC checkout, `ESUUID_ESTC` to override the ESTC entry point, or `ESUUID_PYTHON` to select a Python executable.
+`npm run release:gate` runs the portable/full verification, the exact 48-check live Illustrator contract, a clean packed-tarball install/rebuild, the evidence/document synchronization gate, and the release manifest/checksum generator. The live benchmark is intentionally separate because its evidence remains valid only while its recorded ESUUID/ESRAND/ESTIMER artifact hashes match the current bytes.
+
+The V2 harness prefers the stable per-user COM Tool V2 install at `%LOCALAPPDATA%\Programs\ComToolV2\current\ComTool.Cli.exe`, falls back to the toolkit workspace Release CLI when present, and accepts `COMTOOL_V2_CLI` / `--cli` as an explicit override. If another COM Tool runtime owns Illustrator, live gates wait safely for up to 60 seconds by default without stealing the lease; set `COMTOOL_V2_LEASE_WAIT_MS` or `--lease-wait-ms` to change that bound.
+
+`npm run build` uses the pinned public ESTC dependency installed by `npm ci` by default. Set `ESUUID_USE_WORKSPACE_ESTC=1` to opt into the sibling toolkit ESTC checkout, `ESUUID_ESTC` to override the ESTC entry point, or `ESUUID_PYTHON` to select a Python executable. Standalone live validation can point at external sibling artifacts with `ESUUID_ESRAND_VENDOR`; live benchmarking additionally accepts `ESUUID_ESTIMER_VENDOR`.
 
 ---
 
@@ -530,10 +536,18 @@ es-uuid/
 │  └─ run-live-bench.mjs       benchmark orchestrator
 ├─ tooling/
 │  ├─ comtool-v2.mjs           live-gate transport helper
+│  ├─ check-evidence.mjs        artifact/evidence/docs consistency gate
+│  ├─ pack-smoke.mjs            clean tarball rebuild + byte parity
+│  ├─ release-gate.mjs          end-to-end release orchestrator
+│  ├─ release-manifest.mjs      hashes + immutable release lock
 │  └─ minifier/                pinned conservative JSX minifier pipeline
 ├─ evidence/
 │  ├─ latest-live-verify.json
-│  └─ latest-live-benchmark.json
+│  ├─ latest-live-benchmark.json
+│  └─ latest-pack-reproducibility.json
+├─ release/
+│  ├─ esuuid-v0.1.0.lock.json
+│  └─ SHA256SUMS.txt
 ├─ esuuid-build.mjs
 ├─ extendscript.estc.config.mjs
 ├─ extendscript.vendor.estc.config.mjs

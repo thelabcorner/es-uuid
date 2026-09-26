@@ -42,6 +42,7 @@ jobs:
           python-version: "3.12"
       - run: npm ci
       - run: npm run verify
+      - run: npm run pack:smoke
       - name: Verify checked-in distribution is current
         shell: pwsh
         run: |

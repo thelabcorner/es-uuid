@@ -47,8 +47,10 @@ function requireText(haystack, needle, label) {
 
 var livePath = join(ROOT, 'evidence', 'latest-live-verify.json');
 var benchPath = join(ROOT, 'evidence', 'latest-live-benchmark.json');
+var packPath = join(ROOT, 'evidence', 'latest-pack-reproducibility.json');
 var live = readJson(livePath);
 var bench = readJson(benchPath);
+var pack = readJson(packPath);
 
 assertEqual('live check count', live.checks, EXPECTED_LIVE_CHECKS);
 assertEqual('live result', live.result,
@@ -74,6 +76,19 @@ assertHash('live ESRAND vendor', esrand, live.artifacts && live.artifacts.esrand
 assertHash('benchmark ESUUID vendor', vendor, bench.artifacts && bench.artifacts.esuuidVendorSha256);
 assertHash('benchmark ESRAND vendor', esrand, bench.artifacts && bench.artifacts.esrandVendorSha256);
 assertHash('benchmark ESTIMER vendor', estimer, bench.artifacts && bench.artifacts.estimerVendorSha256);
+
+if (pack.byteIdentical !== true) fail('packed rebuild evidence is not byte-identical');
+if (!Array.isArray(pack.artifacts) || pack.artifacts.length !== 5) {
+  fail('packed rebuild evidence must contain exactly 5 artifacts');
+}
+for (var pi = 0; pi < pack.artifacts.length; pi++) {
+  var packedArtifact = pack.artifacts[pi];
+  assertHash(
+    'packed rebuild ' + packedArtifact.file,
+    join(ROOT, packedArtifact.file),
+    packedArtifact.sha256
+  );
+}
 
 if (bench.rounds !== 3) fail('benchmark evidence must contain 3 rounds');
 if (!Array.isArray(bench.summary) || bench.summary.length !== 7) {
@@ -146,5 +161,5 @@ for (i = 0; i < bench.summary.length; i++) {
 
 console.log(
   '[evidence:check] PASS: ' + EXPECTED_LIVE_CHECKS + '/' + EXPECTED_LIVE_CHECKS +
-  ' live contract, 7 benchmark lanes, artifact hashes, sizes, and docs are synchronized'
+  ' live contract, 7 benchmark lanes, packed reproducibility, artifact hashes, sizes, and docs are synchronized'
 );

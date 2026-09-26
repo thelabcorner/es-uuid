@@ -33,6 +33,20 @@ Current generated artifact sizes:
 
 All four ExtendScript artifacts pass ESTC conservative parser checks and the build's descriptor-module-helper guard.
 
+## Packed-source reproducibility
+
+Evidence: `evidence/latest-pack-reproducibility.json`
+
+The release smoke packs ESUUID, extracts the tarball into a fresh ignored directory, installs only the dependencies declared by that packed package, runs the complete `npm run verify` gate there, then compares rebuilt output to the source tree.
+
+- Clean packed-package install: pass
+- Packed full verification: pass
+- Byte-identical regenerated artifacts: **5/5**
+- Pinned differential oracle: `uuid@14.0.2`
+- Pinned TypeScript: 5.9.3
+- Pinned esbuild: 0.28.2
+- ESTC: Git commit pinned in `package.json`
+
 ## Live Illustrator verification
 
 Evidence: `evidence/latest-live-verify.json`
