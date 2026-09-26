@@ -1,0 +1,73 @@
+{
+  "name": "esuuid",
+  "version": "0.1.0",
+  "description": "ESUUID — RFC 9562 UUIDs for Adobe ExtendScript ES3, with ESRAND-backed entropy",
+  "type": "module",
+  "main": "dist/esuuid-core.esm.mjs",
+  "scripts": {
+    "build": "node esuuid-build.mjs",
+    "build:node": "node esuuid-build.mjs --node-only",
+    "typecheck": "tsc --noEmit -p .",
+    "test": "node tests/esuuid-test.mjs",
+    "differential": "node tests/differential.mjs",
+    "fuzz": "node tests/fuzz.mjs",
+    "benchmark": "node tests/benchmark.mjs",
+    "live-benchmark": "node bench/run-live-bench.mjs",
+    "verify:portable": "npm run typecheck && npm run build:node && npm test && npm run differential && npm run fuzz",
+    "verify": "npm run typecheck && npm run build && npm test && npm run differential && npm run fuzz",
+    "prelive-verify": "npm run build",
+    "live-verify": "node tests/live-verify.mjs",
+    "release:gate": "npm run verify && node tests/live-verify.mjs",
+    "prepublishOnly": "npm run verify"
+  },
+  "files": [
+    "dist/ESUUID.jsx",
+    "dist/ESUUID.min.jsx",
+    "dist/vendor-esuuid.js",
+    "dist/vendor-esuuid.min.js",
+    "dist/esuuid-core.esm.mjs",
+    "esuuid-build.mjs",
+    "extendscript.estc.config.mjs",
+    "extendscript.vendor.estc.config.mjs",
+    "src/",
+    "tests/esuuid-test.mjs",
+    "tests/differential.mjs",
+    "tests/fuzz.mjs",
+    "tests/benchmark.mjs",
+    "tests/esuuid-live-probe.jsx",
+    "tests/live-verify.mjs",
+    "bench/live-bench.jsx",
+    "bench/run-live-bench.mjs",
+    "tooling/comtool-v2.mjs",
+    "tooling/minifier/conservative.json",
+    "tooling/minifier/extendscript_preprocess.py",
+    "tooling/minifier/minify-jsx.py",
+    "tooling/minifier/minify-worker.mjs",
+    "evidence/latest-live-verify.json",
+    "evidence/latest-live-benchmark.json",
+    "README.md",
+    "MEASURED-FACTS.md",
+    "ATTRIBUTION.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    "package.json",
+    "tsconfig.json"
+  ],
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "extendscript-toolchain": "https://codeload.github.com/thelabcorner/estc/tar.gz/b2270f5b58326b5b1ae13ba3263faf151c31e689",
+    "typescript": "5.9.3",
+    "uglify-js": "3.19.3",
+    "uuid": "14.0.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thelabcorner/es-uuid.git"
+  },
+  "keywords": ["uuid","rfc9562","extendscript","es3","adobe","illustrator","esrand"]
+}

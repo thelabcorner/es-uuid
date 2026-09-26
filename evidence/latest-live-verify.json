@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "kind": "esuuid-live-verify",
+  "capturedAt": "2026-09-26T08:00:20.387Z",
+  "transport": "COM Tool V2 script.runFile",
+  "pipe": "esuuid-live-verify",
+  "target": {
+    "id": "illustrator:c29900e5439c5b3fc20b4597",
+    "host": "illustrator",
+    "processId": 20416,
+    "hostVersion": "30.6.0",
+    "adapterVersion": "0.1.0-dev"
+  },
+  "requestId": "esuuid-live-73bc149f6fb429f2-mui3noxf",
+  "probeSha256": "73bc149f6fb429f22bafb0bdcffc8e5e07f1d548d8e3c83b0b29d6e04e3ed2ad",
+  "checks": 48,
+  "illustrator": "30.6.0",
+  "extendScript": "4.5.6",
+  "result": "ESUUID_LIVE_PASS|48|Illustrator=30.6.0|ExtendScript=4.5.6",
+  "timing": {
+    "queueMs": 0.0027,
+    "executeMs": 220.3667,
+    "verifyMs": 0,
+    "totalMs": 3696.6114
+  },
+  "targetState": "known_changed"
+}

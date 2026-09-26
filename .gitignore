@@ -1,0 +1,5 @@
+node_modules/
+tests/.tmp/
+__pycache__/
+*.py[cod]
+*.log

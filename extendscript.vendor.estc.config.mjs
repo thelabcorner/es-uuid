@@ -1,0 +1,22 @@
+export default {
+  host: 'illustrator',
+  hostTypes: 'Illustrator/2022',
+  entry: 'src/jsx-entry.ts',
+  outfile: 'dist/vendor-esuuid.estc.js',
+  globalName: '__ESUUID_ENTRY__',
+  target: 'illustrator',
+  requireTarget: false,
+  sourceLint: true,
+  typecheck: true,
+  normalize: true,
+  compatibilityTransforms: ['esbuild'],
+  compatibilityShims: [],
+  allowedMissingBuiltins: [],
+  allowedGlobalPatches: [],
+  prelude: [],
+  footer: [],
+  allowJson: false,
+  allowIncludes: false,
+  live: false,
+  liveLaunch: false
+};
