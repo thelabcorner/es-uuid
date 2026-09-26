@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import {
   existsSync,
   mkdirSync,
   readFileSync,
-  readdirSync,
   statSync,
   writeFileSync
 } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 var ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -30,42 +30,45 @@ function digest(rel) {
   };
 }
 
-function collectFiles(dir, out) {
-  var entries = readdirSync(dir, { withFileTypes: true });
-  for (var i = 0; i < entries.length; i++) {
-    var entry = entries[i];
-    var full = join(dir, entry.name);
-    var rel = relative(ROOT, full).replace(/\\/g, '/');
-    // A normal checkout exposes .git as a directory; linked worktrees expose
-    // it as a file. Neither representation is source and neither may affect
-    // release provenance.
-    if (rel === '.git' || rel.indexOf('.git/') === 0) continue;
-    if (entry.isDirectory()) {
-      if (
-        rel === 'node_modules' ||
-        rel === 'dist' ||
-        rel === 'evidence' ||
-        rel === 'release' ||
-        rel === 'prototypes' ||
-        rel === 'tests/.tmp'
-      ) continue;
-      collectFiles(full, out);
-    } else if (entry.isFile()) {
-      out.push(rel);
-    }
-  }
+function releaseSourceFiles() {
+  // Git is the authority for release-source membership. -c/-o includes tracked
+  // files plus nonignored untracked files, while respecting .gitignore so
+  // transient caches can never enter provenance.
+  var raw = execFileSync(
+    'git',
+    ['ls-files', '-co', '--exclude-standard', '-z'],
+    { cwd: ROOT }
+  ).toString('utf8');
+
+  return raw
+    .split('\0')
+    .filter(Boolean)
+    .map(function (rel) { return rel.replace(/\\/g, '/'); })
+    .filter(function (rel) {
+      return !/^(?:dist|evidence|release|prototypes|tests\/\.tmp)(?:\/|$)/.test(rel);
+    })
+    .sort();
 }
 
-var sourceFiles = [];
-collectFiles(ROOT, sourceFiles);
-sourceFiles.sort();
+function canonicalBlobId(rel) {
+  // --path applies the repository's clean filters (notably text/eol
+  // normalization) without staging or modifying the worktree. Hashing this
+  // canonical blob identity makes provenance invariant across CRLF/LF
+  // checkouts and ordinary vs linked worktrees.
+  return execFileSync(
+    'git',
+    ['hash-object', '--path=' + rel, rel],
+    { cwd: ROOT, encoding: 'utf8' }
+  ).trim();
+}
 
+var sourceFiles = releaseSourceFiles();
 var sourceHasher = createHash('sha256');
 for (var i = 0; i < sourceFiles.length; i++) {
   var rel = sourceFiles[i];
   sourceHasher.update(rel, 'utf8');
   sourceHasher.update('\0');
-  sourceHasher.update(readFileSync(join(ROOT, rel)));
+  sourceHasher.update(canonicalBlobId(rel), 'ascii');
   sourceHasher.update('\0');
 }
 
