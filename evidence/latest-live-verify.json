@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "kind": "esuuid-live-verify",
-  "capturedAt": "2026-09-26T19:32:06.246Z",
+  "capturedAt": "2026-09-26T19:36:14.794Z",
   "transport": "COM Tool V2 script.runFile",
-  "pipe": "estc-v2-83168-1790451122704",
+  "pipe": "estc-v2-95292-1790451371366",
   "target": {
     "id": "illustrator:775050e0d6dee8a3d8dd098a",
     "host": "illustrator",
@@ -11,7 +11,7 @@
     "hostVersion": "30.6.0",
     "adapterVersion": "0.1.0-dev"
   },
-  "requestId": "esuuid-live-d4749dea12ba5f16-muisdedx",
+  "requestId": "esuuid-live-d4749dea12ba5f16-muisiq58",
   "probeSha256": "d4749dea12ba5f16aaa6f03dd091505d6576d812d0614cbe7b6b5845947436e6",
   "artifacts": {
     "esuuidReadableSha256": "e217d0c3da1fc087ee00757fb475878277d3f107b1cdc0de46c060f4a44f941b",
@@ -23,10 +23,10 @@
   "extendScript": "4.5.6",
   "result": "ESUUID_LIVE_PASS|54|Illustrator=30.6.0|ExtendScript=4.5.6",
   "timing": {
-    "queueMs": 0.0026,
-    "executeMs": 71.6097,
+    "queueMs": 0.0039,
+    "executeMs": 78.3852,
     "verifyMs": 0,
-    "totalMs": 99.6114
+    "totalMs": 108.0487
   },
   "targetState": "known_changed"
 }
