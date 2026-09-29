@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "kind": "esuuid-composition-live",
+  "capturedAt": "2026-09-29T18:36:35.212Z",
+  "transport": "ESTC COMTool V2 Node SDK",
+  "artifact": {
+    "file": "dist/ESUUID.bundle.jsx",
+    "sha256": "3d2187897f09742a54dae07868939ba483257e9a3f9a29ed50bce6075e24cdb0"
+  },
+  "illustrator": "30.6.0",
+  "extendScript": "4.5.6",
+  "activationOrder": [
+    "esrand@0.2.0",
+    "esuuid@0.2.0"
+  ],
+  "entropy": "ESRAND",
+  "payloadCount": 0,
+  "crossEvaluationDedup": true,
+  "result": "PASS"
+}

@@ -1,19 +1,30 @@
 {
   "schemaVersion": 1,
-  "kind": "esuuid-pack-reproducibility",
-  "capturedAt": "2026-09-29T18:36:50.247Z",
+  "project": "ESUUID",
+  "version": "0.2.0",
+  "standard": "RFC 9562",
+  "compatibilityOracle": "uuid@14.0.2",
+  "generatedAt": "2026-09-29T18:36:53.331Z",
   "node": "v24.21.0",
-  "package": {
-    "filename": "esuuid-0.2.0.tgz",
-    "bytes": 149507,
-    "npmShasum": "8497deecb30b7aa8e2416b63a3e93461adf7d662",
-    "npmIntegrity": "sha512-+RZpEp0F1XKWrxKkjNbqcom4Spa4bbjf09oQnTQpDjag9tQebAbfncM8+VNAWV6NqMXiILHYPmDkDtiUbcdHhg==",
-    "entryCount": 48
+  "sourceTreeSha256": "89644834f9eff7c200dc72189459199b8b1c33bff765a20f616698fc292024a9",
+  "sourceFileCount": 40,
+  "toolchain": {
+    "esbuild": "0.28.2",
+    "extendscriptToolchain": "https://codeload.github.com/thelabcorner/estc/tar.gz/4b1966e69712a20f5a3739f64a1ba38b01843bf8",
+    "typescript": "5.9.3",
+    "uglifyJs": "3.19.3",
+    "uuidOracle": "14.0.2"
   },
-  "install": "npm install --ignore-scripts in clean extracted tarball",
-  "toolingImport": "tooling/comtool.mjs imports COMTool integration from the declared pinned ESTC dependency",
-  "verification": "npm run verify:portable; validate shipped ESPACK v2 manifest/provenance",
-  "byteIdentical": true,
+  "validation": {
+    "unitChecks": 55,
+    "differentialChecks": 3225,
+    "fuzzChecks": 75000,
+    "liveChecks": 54,
+    "liveIllustrator": "30.6.0",
+    "liveExtendScript": "4.5.6",
+    "benchmarkLanes": null,
+    "packByteIdentical": false
+  },
   "artifacts": [
     {
       "file": "dist/ESUUID.jsx",
@@ -59,6 +70,28 @@
       "file": "dist/esuuid-core.esm.mjs",
       "bytes": 20459,
       "sha256": "300c3a863562fe51ffebbd634d5900a6cbb897ba5fa2283d6efe47038c7bca24"
+    }
+  ],
+  "evidence": [
+    {
+      "file": "evidence/latest-live-verify.json",
+      "bytes": 991,
+      "sha256": "6d3fba254679c2797232e47fd5f5229ce87f74718c1370bd8c628388ba843a08"
+    },
+    {
+      "file": "evidence/latest-composition-live.json",
+      "bytes": 506,
+      "sha256": "d335e57751db4e56ad476ab288de8aa8b5749ac326a5e37096736e8d0b132f12"
+    },
+    {
+      "file": "evidence/latest-live-benchmark.json",
+      "bytes": 16181,
+      "sha256": "a767518f92cb138fa13e38f29fa24fdac0a7abcddaea166975b8c5305876ca4c"
+    },
+    {
+      "file": "evidence/latest-pack-reproducibility.json",
+      "bytes": 2155,
+      "sha256": "62f4152ccc121aa11c8d551ce2674ba272cc0660a4e58ca2002eb0b2d4d50a0b"
     }
   ]
 }
