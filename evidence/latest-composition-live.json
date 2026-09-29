@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "esuuid-composition-live",
-  "capturedAt": "2026-09-29T19:09:32.697Z",
+  "capturedAt": "2026-09-29T19:27:03.802Z",
   "transport": "ESTC COMTool V2 Node SDK",
   "artifact": {
     "file": "dist/ESUUID.bundle.jsx",

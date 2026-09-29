@@ -4,7 +4,7 @@
   "version": "0.2.0",
   "standard": "RFC 9562",
   "compatibilityOracle": "uuid@14.0.2",
-  "generatedAt": "2026-09-29T19:09:46.240Z",
+  "generatedAt": "2026-09-29T19:27:17.313Z",
   "node": "v24.21.0",
   "sourceTreeSha256": "772f7a34426341a917b5b760bcdebf809636f25e0b9a0315e9599eae3010044e",
   "sourceFileCount": 41,
@@ -76,12 +76,12 @@
     {
       "file": "evidence/latest-live-verify.json",
       "bytes": 991,
-      "sha256": "aaa176e3d494cc13899889501a74d08ba629e540428c299cc3f581de9e110279"
+      "sha256": "8bc2d0e659e79ccc9c8b21e60e5cc2416924639bf3e1f6a8aa395c8972e5bba2"
     },
     {
       "file": "evidence/latest-composition-live.json",
       "bytes": 506,
-      "sha256": "cc6f3b2cda19fd50c75f078ffbda2ab488c9cd1d7dc1660676fd4a2be95fe3e6"
+      "sha256": "9a63f4a483953aab64b4b306b57a794cf730c193109b8f15faea0b4e370def52"
     },
     {
       "file": "evidence/latest-live-benchmark.json",
@@ -91,7 +91,7 @@
     {
       "file": "evidence/latest-pack-reproducibility.json",
       "bytes": 2155,
-      "sha256": "b2c33cee2e6ac2fc9f6fed12aa7402d2a692a3ceb7d63f72f6658e718dfa39ce"
+      "sha256": "2dbfd819d872792fc77263eada79d642156d8a057904ce3718158e692fd4ca62"
     }
   ]
 }
