@@ -4,10 +4,10 @@
   "version": "0.2.0",
   "standard": "RFC 9562",
   "compatibilityOracle": "uuid@14.0.2",
-  "generatedAt": "2026-09-29T18:36:53.331Z",
+  "generatedAt": "2026-09-29T19:09:46.240Z",
   "node": "v24.21.0",
-  "sourceTreeSha256": "89644834f9eff7c200dc72189459199b8b1c33bff765a20f616698fc292024a9",
-  "sourceFileCount": 40,
+  "sourceTreeSha256": "772f7a34426341a917b5b760bcdebf809636f25e0b9a0315e9599eae3010044e",
+  "sourceFileCount": 41,
   "toolchain": {
     "esbuild": "0.28.2",
     "extendscriptToolchain": "https://codeload.github.com/thelabcorner/estc/tar.gz/4b1966e69712a20f5a3739f64a1ba38b01843bf8",
@@ -76,12 +76,12 @@
     {
       "file": "evidence/latest-live-verify.json",
       "bytes": 991,
-      "sha256": "6d3fba254679c2797232e47fd5f5229ce87f74718c1370bd8c628388ba843a08"
+      "sha256": "aaa176e3d494cc13899889501a74d08ba629e540428c299cc3f581de9e110279"
     },
     {
       "file": "evidence/latest-composition-live.json",
       "bytes": 506,
-      "sha256": "d335e57751db4e56ad476ab288de8aa8b5749ac326a5e37096736e8d0b132f12"
+      "sha256": "cc6f3b2cda19fd50c75f078ffbda2ab488c9cd1d7dc1660676fd4a2be95fe3e6"
     },
     {
       "file": "evidence/latest-live-benchmark.json",
@@ -91,7 +91,7 @@
     {
       "file": "evidence/latest-pack-reproducibility.json",
       "bytes": 2155,
-      "sha256": "62f4152ccc121aa11c8d551ce2674ba272cc0660a4e58ca2002eb0b2d4d50a0b"
+      "sha256": "b2c33cee2e6ac2fc9f6fed12aa7402d2a692a3ceb7d63f72f6658e718dfa39ce"
     }
   ]
 }
