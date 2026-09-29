@@ -43,6 +43,9 @@ runNpm(['run', 'verify']);
 console.log('[release:gate] live Illustrator verification');
 run(process.execPath, ['tests/live-verify.mjs'].concat(liveArgs));
 
+console.log('[release:gate] no-preload ESPACK composition verification');
+run(process.execPath, ['tests/composition-live.mjs']);
+
 console.log('[release:gate] packed-package reproducibility');
 runNpm(['run', 'pack:smoke']);
 

@@ -1,6 +1,6 @@
 # ESUUID measured facts
 
-Measured facts for ESUUID 0.1.0. Values in this file are evidence records, not portability promises.
+Measured facts for ESUUID 0.2.0. Values in this file are evidence records, not portability promises.
 
 ## Portable verification
 
@@ -37,11 +37,12 @@ All four ExtendScript artifacts pass ESTC conservative parser checks and the bui
 
 Evidence: `evidence/latest-pack-reproducibility.json`
 
-The release smoke packs ESUUID, extracts the tarball into a fresh ignored directory, installs only the dependencies declared by that packed package, runs the complete `npm run verify` gate there, then compares rebuilt output to the source tree.
+The release smoke packs ESUUID, extracts the tarball into a fresh ignored directory, installs only the dependencies declared by that packed package, runs the portable package gate there, validates the shipped ESPACK manifest-v2 closure/provenance, and byte-compares every shipped composition artifact to the source tree.
 
 - Clean packed-package install: pass
-- Packed full verification: pass
-- Byte-identical regenerated artifacts: **5/5**
+- Packed portable verification: pass
+- Packed manifest-v2 provenance validation: pass
+- Byte-identical shipped artifacts: **9/9**
 - Pinned differential oracle: `uuid@14.0.2`
 - Pinned TypeScript: 5.9.3
 - Pinned esbuild: 0.28.2
@@ -55,7 +56,7 @@ Evidence: `evidence/latest-live-verify.json`
 - ExtendScript: 4.5.6
 - Transport: COM Tool V2 `script.runFile`
 - Live checks: 54/54
-- Probe SHA-256: `d4749dea12ba5f16aaa6f03dd091505d6576d812d0614cbe7b6b5845947436e6`
+- Probe SHA-256: `adb432f2cc7c27699073c5cb5c18a1c1e5438766fa9113f773cb525e17001e1b`
 - Latest captured result: `ESUUID_LIVE_PASS|54|Illustrator=30.6.0|ExtendScript=4.5.6`
 
 The live probe covers RFC vectors, readable/minified fresh loads, ESRAND-backed defaults, the warned one-time `Math.random()` fallback when ESRAND is absent, automatic upgrade from the fallback facade when ESRAND becomes available, explicit RNG/RAND overrides, offset guards, v1/v6 conversion guards, v1 node multicast behavior, v7 sequence bounds, and same-version reload preservation.
@@ -78,15 +79,15 @@ Environment and protocol:
 
 | Lane | Median us/op | p95 us/op | Median ops/s |
 |---|---:|---:|---:|
-| v4 + ESRAND | 46.856 | 47.872 | 21,342 |
-| v4 + Math.random fallback | 52.524 | 56.660 | 19,039 |
-| v4 explicit bytes | 37.308 | 41.146 | 26,804 |
-| v7 + ESRAND | 56.012 | 72.820 | 17,853 |
-| v7 + Math.random fallback | 60.144 | 64.088 | 16,627 |
-| v7 explicit bytes/time/sequence | 44.094 | 47.030 | 22,679 |
-| parse | 122.081 | 130.118 | 8,191 |
-| stringify | 92.386 | 115.859 | 10,824 |
-| v5 | 897.700 | 922.660 | 1,114 |
+| v4 + ESRAND | 47.012 | 50.284 | 21,271 |
+| v4 + Math.random fallback | 51.336 | 62.608 | 19,480 |
+| v4 explicit bytes | 37.354 | 45.692 | 26,771 |
+| v7 + ESRAND | 53.700 | 66.676 | 18,622 |
+| v7 + Math.random fallback | 61.684 | 64.576 | 16,212 |
+| v7 explicit bytes/time/sequence | 45.654 | 51.730 | 21,904 |
+| parse | 135.185 | 149.374 | 7,397 |
+| stringify | 95.471 | 97.147 | 10,474 |
+| v5 | 1,016.220 | 1,190.840 | 984 |
 
 The `Math.random` lanes are steady-state measurements; the one-time warning is
 emitted during warmup and is not part of the measured medians. These values are

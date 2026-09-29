@@ -11,7 +11,7 @@ import {
   resultValue,
   runFile,
   sha256File
-} from '../tooling/comtool-v2.mjs';
+} from '../tooling/comtool.mjs';
 
 var config = parseCommonOptions(process.argv.slice(2));
 var EXPECTED_LIVE_CHECKS = 54;
@@ -34,7 +34,7 @@ assertExtendScriptArtifactSafe(
   'ESRAND vendor artifact'
 );
 
-var targetEntry = discoverIllustratorTarget(config);
+var targetEntry = await discoverIllustratorTarget(config);
 var targetId = targetEntry.target.id;
 var leaseId = null;
 var envelope = null;
@@ -42,8 +42,8 @@ var hash = sha256File(probe);
 var requestId = 'esuuid-live-' + hash.slice(0, 16) + '-' + Date.now().toString(36);
 
 try {
-  leaseId = acquireLeaseWithRetry(config, targetId, 180000);
-  envelope = runFile(config, {
+  leaseId = await acquireLeaseWithRetry(config, targetId, 180000);
+  envelope = await runFile(config, {
     leaseId: leaseId,
     requestId: requestId,
     path: probe,
@@ -52,7 +52,7 @@ try {
     timeoutMs: 300000
   });
 } finally {
-  if (leaseId) releaseLease(config, targetId, leaseId);
+  if (leaseId) await releaseLease(config, targetId, leaseId);
 }
 
 var value = resultValue(envelope);
@@ -75,7 +75,7 @@ var evidence = {
   schemaVersion: 1,
   kind: 'esuuid-live-verify',
   capturedAt: new Date().toISOString(),
-  transport: 'COM Tool V2 script.runFile',
+  transport: 'ESTC + COMTool Node SDK / script.runFile',
   pipe: config.pipe,
   target: {
     id: targetId,

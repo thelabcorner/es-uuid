@@ -101,17 +101,26 @@ run(process.execPath, [
   '--input-type=module',
   '-e',
   [
-    "const m = await import('./tooling/comtool-v2.mjs');",
+    "const m = await import('./tooling/comtool.mjs');",
     "if (typeof m.parseCommonOptions !== 'function' || typeof m.runFile !== 'function')",
-    "  throw new Error('packed COM Tool V2 helper exports are incomplete');"
+    "  throw new Error('packed COMTool helper exports are incomplete');"
   ].join('\n')
 ], { cwd: packedRoot, timeoutMs: 300000 });
 
-runNpm(['run', 'verify'], { cwd: packedRoot, timeoutMs: 300000 });
+// ESPACK is intentionally a workspace/build-time composer, not an ESUUID
+// package-install or runtime dependency. A published tarball therefore ships
+// already-composed v2 artifacts rather than trying to rebuild them from sibling
+// repositories that consumers do not have. Verify the portable package surface
+// in isolation, then validate and byte-compare the shipped composition below.
+runNpm(['run', 'verify:portable'], { cwd: packedRoot, timeoutMs: 300000 });
 
 var artifactPaths = [
   'dist/ESUUID.jsx',
   'dist/ESUUID.min.jsx',
+  'dist/ESUUID.facade.jsx',
+  'dist/ESUUID.bundle.jsx',
+  'dist/ESUUID.bundle.min.jsx',
+  'dist/ESUUID.manifest.json',
   'dist/vendor-esuuid.js',
   'dist/vendor-esuuid.min.js',
   'dist/esuuid-core.esm.mjs'
@@ -126,7 +135,7 @@ for (var i = 0; i < artifactPaths.length; i++) {
   var packedHash = sha256(packedPath);
   if (sourceHash !== packedHash) {
     throw new Error(
-      'packed rebuild is not byte-identical for ' + rel +
+      'packed artifact is not byte-identical for ' + rel +
       ': source=' + sourceHash + ' packed=' + packedHash
     );
   }
@@ -135,6 +144,38 @@ for (var i = 0; i < artifactPaths.length; i++) {
     bytes: statSync(sourcePath).size,
     sha256: sourceHash
   });
+}
+
+// Validate the packed manifest-v2 closure and its embedded source provenance
+// without requiring the composer implementation itself in the consumer package.
+var packedManifest = JSON.parse(
+  readFileSync(join(packedRoot, 'dist', 'ESUUID.manifest.json'), 'utf8')
+);
+if (packedManifest.format !== 'espack-manifest' || packedManifest.version !== 2) {
+  throw new Error('packed ESUUID manifest is not ESPACK manifest v2');
+}
+if (
+  !packedManifest.composer ||
+  packedManifest.composer.name !== 'espack' ||
+  packedManifest.composer.version !== '0.5.0'
+) {
+  throw new Error('packed ESUUID manifest does not pin composer espack@0.5.0');
+}
+var packedLibraries = Array.isArray(packedManifest.libraries) ? packedManifest.libraries : [];
+var packedLibraryIds = packedLibraries.map(function (lib) { return lib.id; }).join(',');
+if (packedLibraryIds !== 'esrand,esuuid') {
+  throw new Error('packed ESUUID library closure/order mismatch: ' + packedLibraryIds);
+}
+for (var li = 0; li < packedLibraries.length; li++) {
+  var lib = packedLibraries[li];
+  if (!lib.artifact || lib.artifact.encoding !== 'utf8-base64') {
+    throw new Error('packed library ' + lib.id + ' missing utf8-base64 artifact');
+  }
+  var bytes = Buffer.from(lib.artifact.b64, 'base64');
+  var digest = createHash('sha256').update(bytes).digest('hex');
+  if (bytes.length !== Number(lib.artifact.len) || digest !== lib.artifact.sha256) {
+    throw new Error('packed library provenance mismatch for ' + lib.id);
+  }
 }
 
 var evidence = {
@@ -150,8 +191,8 @@ var evidence = {
     entryCount: packInfo[0].entryCount || null
   },
   install: 'npm install --ignore-scripts in clean extracted tarball',
-  toolingImport: 'tooling/comtool-v2.mjs imports from declared pinned ESTC dependency',
-  verification: 'npm run verify',
+  toolingImport: 'tooling/comtool.mjs imports COMTool integration from the declared pinned ESTC dependency',
+  verification: 'npm run verify:portable; validate shipped ESPACK v2 manifest/provenance',
   byteIdentical: true,
   artifacts: artifacts
 };
@@ -185,7 +226,7 @@ if (
 rmSync(TMP, { recursive: true, force: true });
 
 console.log(
-  '[pack:smoke] PASS: clean tarball install + shipped live-tooling import + full verify + ' +
-  artifacts.length + '/' + artifacts.length +
-  ' byte-identical rebuilt artifacts + stable second pack'
+  '[pack:smoke] PASS: clean tarball install + shipped live-tooling import + portable verify + ' +
+  'manifest-v2 provenance + ' + artifacts.length + '/' + artifacts.length +
+  ' byte-identical shipped artifacts + stable second pack'
 );

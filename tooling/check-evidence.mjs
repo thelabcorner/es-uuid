@@ -85,14 +85,31 @@ assertHash('benchmark ESUUID vendor', vendor, bench.artifacts && bench.artifacts
 assertHash('benchmark ESRAND vendor', esrand, bench.artifacts && bench.artifacts.esrandVendorSha256);
 assertHash('benchmark ESTIMER vendor', estimer, bench.artifacts && bench.artifacts.estimerVendorSha256);
 
-if (pack.byteIdentical !== true) fail('packed rebuild evidence is not byte-identical');
-if (!Array.isArray(pack.artifacts) || pack.artifacts.length !== 5) {
-  fail('packed rebuild evidence must contain exactly 5 artifacts');
+if (pack.byteIdentical !== true) fail('packed artifact evidence is not byte-identical');
+var expectedPackedArtifacts = [
+  'dist/ESUUID.jsx',
+  'dist/ESUUID.min.jsx',
+  'dist/ESUUID.facade.jsx',
+  'dist/ESUUID.bundle.jsx',
+  'dist/ESUUID.bundle.min.jsx',
+  'dist/ESUUID.manifest.json',
+  'dist/vendor-esuuid.js',
+  'dist/vendor-esuuid.min.js',
+  'dist/esuuid-core.esm.mjs'
+];
+if (!Array.isArray(pack.artifacts) || pack.artifacts.length !== expectedPackedArtifacts.length) {
+  fail('packed artifact evidence must contain exactly ' + expectedPackedArtifacts.length + ' artifacts');
 }
 for (var pi = 0; pi < pack.artifacts.length; pi++) {
   var packedArtifact = pack.artifacts[pi];
+  if (packedArtifact.file !== expectedPackedArtifacts[pi]) {
+    fail(
+      'packed artifact order/file mismatch at index ' + pi +
+      ': expected ' + expectedPackedArtifacts[pi] + ', got ' + packedArtifact.file
+    );
+  }
   assertHash(
-    'packed rebuild ' + packedArtifact.file,
+    'packed artifact ' + packedArtifact.file,
     join(ROOT, packedArtifact.file),
     packedArtifact.sha256
   );

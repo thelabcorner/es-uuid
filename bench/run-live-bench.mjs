@@ -13,7 +13,7 @@ import {
   resultValue,
   runFile,
   sha256File
-} from '../tooling/comtool-v2.mjs';
+} from '../tooling/comtool.mjs';
 
 var argv = process.argv.slice(2);
 var config = parseCommonOptions(argv);
@@ -51,7 +51,7 @@ assertExtendScriptArtifactSafe(esrand, 'ESRAND vendor artifact');
 assertExtendScriptArtifactSafe(esuuid, 'ESUUID vendor artifact');
 var probeHash = sha256File(probe);
 
-var targetEntry = discoverIllustratorTarget(config);
+var targetEntry = await discoverIllustratorTarget(config);
 var targetId = targetEntry.target.id;
 var leaseId = null;
 var rows = [];
@@ -73,15 +73,15 @@ function parseResult(text) {
 }
 
 try {
-  leaseId = acquireLeaseWithRetry(config, targetId, 300000);
+  leaseId = await acquireLeaseWithRetry(config, targetId, 300000);
   for (li = 0; li < lanes.length; li++) {
     var lane = lanes[li];
     for (var round = 0; round < rounds; round++) {
-      leaseId = renewLease(config, targetId, leaseId, 300000);
+      leaseId = await renewLease(config, targetId, leaseId, 300000);
       var requestId =
         'esuuid-bench-' + lane + '-' + round + '-' +
         probeHash.slice(0, 10) + '-' + Date.now().toString(36);
-      var envelope = runFile(config, {
+      var envelope = await runFile(config, {
         leaseId: leaseId,
         requestId: requestId,
         path: probe,
@@ -106,7 +106,7 @@ try {
     }
   }
 } finally {
-  if (leaseId) releaseLease(config, targetId, leaseId);
+  if (leaseId) await releaseLease(config, targetId, leaseId);
 }
 
 function median(values) {

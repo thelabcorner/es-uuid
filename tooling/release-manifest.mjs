@@ -75,12 +75,17 @@ for (var i = 0; i < sourceFiles.length; i++) {
 var artifactPaths = [
   'dist/ESUUID.jsx',
   'dist/ESUUID.min.jsx',
+  'dist/ESUUID.facade.jsx',
+  'dist/ESUUID.bundle.jsx',
+  'dist/ESUUID.bundle.min.jsx',
+  'dist/ESUUID.manifest.json',
   'dist/vendor-esuuid.js',
   'dist/vendor-esuuid.min.js',
   'dist/esuuid-core.esm.mjs'
 ];
 var evidencePaths = [
   'evidence/latest-live-verify.json',
+  'evidence/latest-composition-live.json',
   'evidence/latest-live-benchmark.json',
   'evidence/latest-pack-reproducibility.json'
 ];

@@ -3,7 +3,7 @@ import {
   UUIDGenerator, V1Options, V7Options
 } from './types';
 
-export var VERSION = '0.1.0';
+export var VERSION = '0.2.0';
 export var NIL = '00000000-0000-0000-0000-000000000000';
 export var MAX = 'ffffffff-ffff-ffff-ffff-ffffffffffff';
 export var DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';

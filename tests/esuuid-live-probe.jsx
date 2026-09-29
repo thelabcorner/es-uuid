@@ -41,7 +41,7 @@
 
     $.evalFile(esuuidFile);
     assertTrue(typeof ESUUID !== "undefined", "ESUUID global loads");
-    assertEq(ESUUID.VERSION, "0.1.0", "VERSION");
+    assertEq(ESUUID.VERSION, "0.2.0", "VERSION");
     assertEq(ESUUID.capabilities().standard, "RFC 9562", "standard metadata");
     assertEq(ESUUID.capabilities().entropy, "ESRAND", "ESRAND entropy backend");
     assertEq(ESUUID.capabilities().cryptographic, false, "entropy truthfulness");

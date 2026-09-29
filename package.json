@@ -1,6 +1,6 @@
 {
   "name": "esuuid",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ESUUID — RFC 9562 UUIDs for Adobe ExtendScript ES3, with ESRAND-backed entropy",
   "type": "module",
   "main": "dist/esuuid-core.esm.mjs",
@@ -20,13 +20,21 @@
     "verify": "npm run typecheck && npm run build && npm test && npm run differential && npm run fuzz",
     "prelive-verify": "npm run build",
     "live-verify": "node tests/live-verify.mjs",
+    "composition-live": "node tests/composition-live.mjs",
     "release:gate": "node tooling/release-gate.mjs",
     "prepack": "npm run build",
-    "prepublishOnly": "npm run verify"
+    "prepublishOnly": "npm run verify",
+    "verify:engine": "npm run live-verify && npm run composition-live",
+    "ci:static": "npm run verify",
+    "ci:local": "npm run ci:static && npm run verify:engine"
   },
   "files": [
     "dist/ESUUID.jsx",
     "dist/ESUUID.min.jsx",
+    "dist/ESUUID.facade.jsx",
+    "dist/ESUUID.bundle.jsx",
+    "dist/ESUUID.bundle.min.jsx",
+    "dist/ESUUID.manifest.json",
     "dist/vendor-esuuid.js",
     "dist/vendor-esuuid.min.js",
     "dist/esuuid-core.esm.mjs",
@@ -40,9 +48,12 @@
     "tests/benchmark.mjs",
     "tests/esuuid-live-probe.jsx",
     "tests/live-verify.mjs",
+    "tests/composition-live.mjs",
     "bench/live-bench.jsx",
     "bench/run-live-bench.mjs",
+    "tooling/comtool.mjs",
     "tooling/comtool-v2.mjs",
+    "tooling/comtool-cli-fallback.mjs",
     "tooling/check-evidence.mjs",
     "tooling/pack-smoke.mjs",
     "tooling/release-gate.mjs",
@@ -53,6 +64,7 @@
     "tooling/minifier/minify-worker.mjs",
     "evidence/latest-live-verify.json",
     "evidence/latest-live-benchmark.json",
+    "evidence/latest-composition-live.json",
     "README.md",
     "MEASURED-FACTS.md",
     "ATTRIBUTION.md",
@@ -68,6 +80,14 @@
     "typescript": "5.9.3",
     "uglify-js": "3.19.3",
     "uuid": "14.0.2"
+  },
+  "peerDependencies": {
+    "esrand": "^0.2.0"
+  },
+  "peerDependenciesMeta": {
+    "esrand": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=20.0.0"

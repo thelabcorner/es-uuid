@@ -55,6 +55,21 @@ Deterministic random streams and sampling for ExtendScript.
 **[ESUUID](https://github.com/thelabcorner/es-uuid)**  
 RFC 9562 UUID generation, parsing, and conversion for ExtendScript.
 
+**[ESENV](https://github.com/thelabcorner/es-env)**  
+Environment and capability detection for ExtendScript.
+
+**[ESPATH](https://github.com/thelabcorner/es-path)**  
+Deterministic Windows/POSIX path and RFC 8089 file-URI transformations.
+
+**[ESFS](https://github.com/thelabcorner/es-fs)**  
+Synchronous ExtendScript File/Folder I/O with explicit text, BINARY, and replacement semantics.
+
+**[ESHASH](https://github.com/thelabcorner/es-hash)**  
+CRC-32/ISO-HDLC and SHA-256 for byte strings and UTF-8 text.
+
+**[ESLOG](https://github.com/thelabcorner/es-log)**  
+Structured logging with bounded text and JSONL sinks.
+
 </td>
 <td width="50%" valign="top">
 
@@ -80,6 +95,9 @@ Native state and durable storage for Adobe tooling.
 
 **[COMTool](https://github.com/thelabcorner/COMTool)**  
 Guarded COM, ExtendScript, plug-in, and debugger automation for Adobe desktop apps.
+
+**ESsemble** <sub>coming soon</sub>  
+Typed framework, resolver, and composition layer for the ExtendScript toolkit.
 
 **ESOBF** <sub>coming soon</sub>  
 Obfuscation for hardened JSX distribution.
@@ -138,7 +156,7 @@ ESUUID also targets the public API shape developers already know from `uuidjs/uu
 - Warned `Math.random()` fallback when ESRAND and caller entropy are both unavailable.
 - Same-version global reload preserves the existing facade and stateful v1/v7 generator state.
 - Fresh minified and unminified artifacts are both exercised inside real Illustrator.
-- **55** unit checks, **3,225** differential checks, **75,000** fuzz invariants, and **54/54** live Illustrator checks pass on the current 0.1.0 tree.
+- **55** unit checks, **3,225** differential checks, **75,000** fuzz invariants, and **54/54** standalone live Illustrator checks pass; the ESPACK composition lane separately proves ESRAND -> ESUUID activation with no sibling preload.
 
 ---
 
@@ -150,11 +168,21 @@ ESUUID also targets the public API shape developers already know from `uuidjs/uu
 | `dist/ESUUID.jsx` | 18,746 bytes | Installs `$.global.ESUUID` | Readable/debuggable ExtendScript build |
 | `dist/vendor-esuuid.min.js` | 14,595 bytes | Installs `$.global.ESUUID` | Vendoring into another generated bundle |
 | `dist/vendor-esuuid.js` | 18,746 bytes | Installs `$.global.ESUUID` | Readable vendor input |
+| `dist/ESUUID.bundle.min.jsx` | 57,257 bytes | ESPACK v2 activates ESRAND -> ESUUID | Dependency-complete production include; no ESRAND preload |
+| `dist/ESUUID.bundle.jsx` | 88,819 bytes | Same composed graph, readable | Debugging the dependency-complete distribution |
+| `dist/ESUUID.facade.jsx` | 18,833 bytes | Loader-free ESUUID library node | Input to a larger ESPACK v2 composition |
+| `dist/ESUUID.manifest.json` | 77,143 bytes | Exact ESRAND + ESUUID graph/provenance | Build/composition input, not a runtime include |
 | `dist/esuuid-core.esm.mjs` | 20,459 bytes | ESM exports | Node-side tests, differential validation, or tooling |
 
-The four ExtendScript artifacts are generated from the same `src/jsx-entry.ts` entry point. Their current byte sizes come from the standalone, public-reproducible build using the pinned ESTC GitHub dependency.
+The standalone/vendor artifacts and the ESPACK facade are generated from the
+same `src/jsx-entry.ts` entry point. The composed bundle is resolved *after*
+those bytes exist: ESPACK reads the ESRAND v2 manifest, solves the dependency,
+then flattens one loader/control plane followed by ESRAND and ESUUID.
 
-**Rule of thumb:** use `ESUUID.min.jsx` in shipped JSX and `ESUUID.jsx` while debugging.
+**Rule of thumb:** use `ESUUID.bundle.min.jsx` when you want the preferred
+ESRAND backend without managing sibling load order. Use `ESUUID.min.jsx`
+when the host intentionally owns the entropy backend lifecycle or wants the
+documented Math.random fallback.
 
 ---
 
@@ -164,7 +192,21 @@ The four ExtendScript artifacts are generated from the same `src/jsx-entry.ts` e
 
 ESUUID ships generated `dist/` artifacts in the repository so a consumer does not need the TypeScript build toolchain just to use the library.
 
-Load ESRAND first when you want ESUUID's preferred default entropy backend:
+The dependency-complete distribution requires no manual sibling preload:
+
+```jsx
+$.evalFile(File("/path/to/ESUUID.bundle.min.jsx"));
+
+var id = ESUUID.v7();
+// ESUUID.capabilities().entropy === "ESRAND"
+```
+
+That one file is an ESPACK v2 composition of `ESRAND -> ESUUID`. The resolver
+deduplicates transitive libraries and verifies both activation contracts before
+the root is considered active.
+
+When using the **standalone** artifact instead, load ESRAND first when you want
+the same preferred default entropy backend:
 
 ```jsx
 $.evalFile(File("/path/to/vendor-esrand.js"));
@@ -174,6 +216,11 @@ var id = ESUUID.v7();
 ```
 
 ESRAND is available at [thelabcorner/es-rand](https://github.com/thelabcorner/es-rand).
+
+The package-level ESRAND peer remains marked optional because the standalone
+facade intentionally supports a fallback. That host-time fallback is separate
+from the shipped `ESUUID.bundle*.jsx` contract, where ESRAND is a required
+composed dependency.
 
 ### Build from source
 
@@ -259,7 +306,7 @@ $.writeln("v5: " + stableNameId);
 
 | Name | Value / purpose |
 |---|---|
-| `ESUUID.VERSION` | Library version, currently `0.1.0` |
+| `ESUUID.VERSION` | Library version, currently `0.2.0` |
 | `ESUUID.NIL` | `00000000-0000-0000-0000-000000000000` |
 | `ESUUID.MAX` | `ffffffff-ffff-ffff-ffff-ffffffffffff` |
 | `ESUUID.DNS` | RFC namespace UUID for DNS names |
@@ -370,7 +417,7 @@ emits a warning.
 
 ## Validation
 
-Current 0.1.0 validation on the public-reproducible build:
+Current 0.2.0 validation on the public-reproducible build:
 
 | Check | Command | Result |
 |---|---|---|
@@ -415,15 +462,15 @@ Protocol: one benchmark lane per `script.runFile`; ESTIMER prime; 5 warmups; 9 m
 
 | Lane | Median us/op | Min us/op | p95 us/op | Median ops/s |
 |---|---:|---:|---:|---:|
-| v4, ESRAND entropy | 46.856 | 44.824 | 47.872 | 21,342 |
-| v4, Math.random fallback | 52.524 | 51.340 | 56.660 | 19,039 |
-| v4, explicit bytes | 37.308 | 35.836 | 41.146 | 26,804 |
-| v7, ESRAND entropy | 56.012 | 52.464 | 72.820 | 17,853 |
-| v7, Math.random fallback | 60.144 | 59.452 | 64.088 | 16,627 |
-| v7, explicit bytes | 44.094 | 43.138 | 47.030 | 22,679 |
-| parse | 122.081 | 118.234 | 130.118 | 8,191 |
-| stringify | 92.386 | 86.850 | 115.859 | 10,824 |
-| v5 | 897.700 | 885.300 | 922.660 | 1,114 |
+| v4, ESRAND entropy | 47.012 | 44.760 | 50.284 | 21,271 |
+| v4, Math.random fallback | 51.336 | 50.836 | 62.608 | 19,480 |
+| v4, explicit bytes | 37.354 | 35.704 | 45.692 | 26,771 |
+| v7, ESRAND entropy | 53.700 | 51.688 | 66.676 | 18,622 |
+| v7, Math.random fallback | 61.684 | 59.100 | 64.576 | 16,212 |
+| v7, explicit bytes | 45.654 | 43.342 | 51.730 | 21,904 |
+| parse | 135.185 | 123.230 | 149.374 | 7,397 |
+| stringify | 95.471 | 88.325 | 97.147 | 10,474 |
+| v5 | 1,016.220 | 915.400 | 1,190.840 | 984 |
 
 The `Math.random` lanes measure steady-state fallback generation after the
 one-time warning has already been emitted during warmup. These are host-engine
@@ -568,7 +615,7 @@ es-uuid/
 │  ├─ latest-live-benchmark.json
 │  └─ latest-pack-reproducibility.json
 ├─ release/
-│  ├─ esuuid-v0.1.0.lock.json
+│  ├─ esuuid-v0.2.0.lock.json
 │  └─ SHA256SUMS.txt
 ├─ esuuid-build.mjs
 ├─ extendscript.estc.config.mjs
