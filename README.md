@@ -115,6 +115,7 @@ Also from the same team: **[ArcFit.dev](https://arcfit.dev)**, deterministic arc
 - [Why ESUUID?](#why-esuuid)
 - [Features](#features)
 - [Which artifact should I use?](#which-artifact-should-i-use)
+- [Get the Release](#get-the-release)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [API Reference](#api-reference)
@@ -168,8 +169,8 @@ ESUUID also targets the public API shape developers already know from `uuidjs/uu
 | `dist/ESUUID.jsx` | 18,746 bytes | Installs `$.global.ESUUID` | Readable/debuggable ExtendScript build |
 | `dist/vendor-esuuid.min.js` | 14,595 bytes | Installs `$.global.ESUUID` | Vendoring into another generated bundle |
 | `dist/vendor-esuuid.js` | 18,746 bytes | Installs `$.global.ESUUID` | Readable vendor input |
-| `dist/ESUUID.bundle.min.jsx` | 57,257 bytes | ESPACK v2 activates ESRAND -> ESUUID | Dependency-complete production include; no ESRAND preload |
-| `dist/ESUUID.bundle.jsx` | 88,819 bytes | Same composed graph, readable | Debugging the dependency-complete distribution |
+| `dist/ESUUID.bundle.min.jsx` | 57,606 bytes | ESPACK v2 activates ESRAND -> ESUUID | Dependency-complete production include; no ESRAND preload |
+| `dist/ESUUID.bundle.jsx` | 89,890 bytes | Same composed graph, readable | Debugging the dependency-complete distribution |
 | `dist/ESUUID.facade.jsx` | 18,833 bytes | Loader-free ESUUID library node | Input to a larger ESPACK v2 composition |
 | `dist/ESUUID.manifest.json` | 77,143 bytes | Exact ESRAND + ESUUID graph/provenance | Build/composition input, not a runtime include |
 | `dist/esuuid-core.esm.mjs` | 20,459 bytes | ESM exports | Node-side tests, differential validation, or tooling |
@@ -183,6 +184,36 @@ then flattens one loader/control plane followed by ESRAND and ESUUID.
 ESRAND backend without managing sibling load order. Use `ESUUID.min.jsx`
 when the host intentionally owns the entropy backend lifecycle or wants the
 documented Math.random fallback.
+
+---
+
+## Get the Release
+
+<div align="center">
+
+**Production artifacts ship as GitHub release assets. Grab the immutable builds
+from the [Releases page](https://github.com/thelabcorner/es-uuid/releases).**
+
+[![Latest stable](https://img.shields.io/github/v/release/thelabcorner/es-uuid?label=Latest%20stable)](https://github.com/thelabcorner/es-uuid/releases/latest)
+[![Release date](https://img.shields.io/github/release-date/thelabcorner/es-uuid?label=Released)](https://github.com/thelabcorner/es-uuid/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/thelabcorner/es-uuid/total?label=Downloads)](https://github.com/thelabcorner/es-uuid/releases)
+
+</div>
+
+**How it works, in three steps:**
+
+1. Open the [Releases page](https://github.com/thelabcorner/es-uuid/releases).
+2. Pick the **latest stable** tag.
+3. Download the asset that matches your use case:
+
+| You are... | Take this release | And this asset |
+|---|---|---|
+| Wanting the preferred ESRAND-backed production include with no sibling preload | Latest stable | `ESUUID.bundle.min.jsx` (readable: `ESUUID.bundle.jsx`) |
+| Managing the entropy backend yourself or intentionally allowing the documented fallback | Latest stable | `ESUUID.min.jsx` (readable: `ESUUID.jsx`) |
+| Composing ESUUID into a larger ESPACK distribution | Latest stable | `ESUUID.facade.jsx` + `ESUUID.manifest.json` |
+| Vendoring ESUUID into another generated artifact | Latest stable | `vendor-esuuid.min.js` (readable: `vendor-esuuid.js`) |
+| Consuming the reference core from Node tooling | Latest stable | `esuuid-core.esm.mjs` |
+| Verifying immutable release provenance | Latest stable | `esuuid-v0.2.0.lock.json` + `SHA256SUMS.txt` + the preserved `latest-*.json` evidence assets |
 
 ---
 
